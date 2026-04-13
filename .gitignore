@@ -8,12 +8,20 @@
 .angular/
 
 # Node modules and dependency files
-/node_modules/
-/package-lock.json
-/yarn.lock
+node_modules/
+package-lock.json
+yarn.lock
 
 # Environment files
-/.env
+.env
+**/.env
+
+# IDE files
+.idea/
+**/.idea/
+.vscode/
+.DS_Store
+**/.DS_Store
 
 # Angular CLI and build artefacts
 /.angular-cli.json

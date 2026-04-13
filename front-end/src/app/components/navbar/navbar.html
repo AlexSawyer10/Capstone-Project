@@ -1,0 +1,14 @@
+<nav>
+  @if (auth.isLoading$ | async)
+  {
+    <span>Loading...</span>
+  }
+  @else if (auth.isAuthenticated$ | async)
+  {
+    <button (click)="auth.logout({ logoutParams: { returnTo: window.location.origin } })">Logout</button>
+  }
+  @else
+  {
+    <button (click)="auth.loginWithRedirect()">Login</button>
+  }
+</nav>

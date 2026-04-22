@@ -6,6 +6,8 @@ import { User } from "../entities/user.js";
 
 const router = express.Router();
 
+
+
 router.post('/', async (req, res) => {
   const { user_provider_id, user_email, name, user_picture } = req.body;
 

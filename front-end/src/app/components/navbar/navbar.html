@@ -1,14 +1,40 @@
 <nav>
+  <form (ngSubmit)="transferSearchInput(searchInput.value)">
+  <div class="search-wrapper" (focusin)="isSearchOpen.set(true)" (focusout)="handleSearchFocusOut($event)">
+    <div class="search-container">
+      <span class="search-icon" aria-hidden="true">&#128269;</span>
+      <input #searchInput type="text" placeholder="Search For Games" aria-label="Search For Games" required />
+      <button
+        type="button"
+        class="clear-search-btn"
+        (click)="searchInput.value = ''; searchInput.focus()"
+        aria-label="Clear search"
+      >
+        &times;
+      </button>
+    </div>
+
+    @if (isSearchOpen())
+    {
+      <button type="submit" class="search-dropdown-item" aria-label="Submit search">
+        Search
+      </button>
+    }
+  </div>
+  </form>
+
   @if (auth.isLoading$ | async)
   {
     <span>Loading...</span>
   }
   @else if (auth.isAuthenticated$ | async)
   {
-    <button (click)="auth.logout({ logoutParams: { returnTo: window.location.origin } })">Logout</button>
+    <button class="auth-btn" (click)="transferToCreateList()">Create List</button>
+    <button class="auth-btn profile-btn" (click)="transferToLoggedProfile()">Profile</button>
+    <button class="auth-btn" (click)="auth.logout({ logoutParams: { returnTo: window.location.origin } })">Logout</button>
   }
   @else
   {
-    <button (click)="auth.loginWithRedirect()">Login</button>
+    <button class="auth-btn" (click)="auth.loginWithRedirect()">Login</button>
   }
 </nav>

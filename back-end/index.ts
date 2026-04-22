@@ -4,6 +4,8 @@ import cors from 'cors';
 import {AppDataSource} from "./db-connection.js";
 import {Comment} from "./src/entities/comment.js";
 import {loginRouter} from "./src/routes/login_route.js";
+import {searchRouter} from "./src/routes/search_route.js";
+import {profileRouter} from "./src/routes/profile_route.js";
 
 const app = express();
 const PORT = 3000;
@@ -12,6 +14,8 @@ app.use(cors({ origin: 'http://localhost:4200' }));
 app.use(express.json());
 
 app.use("/login", loginRouter)
+app.use("/search", searchRouter)
+app.use("/profile", profileRouter)
 
 app.get('/', (req, res) => {
   res.json({ message: 'Backend is running' });

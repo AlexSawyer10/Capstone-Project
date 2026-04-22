@@ -1,0 +1,19 @@
+<div class="profile-page" *ngIf="auth.user$ | async as user">
+  <div class="profile-card">
+    <img
+      *ngIf="user.picture && !imageFailed"
+      [src]="user.picture"
+      [alt]="user.name"
+      class="profile-pic"
+      referrerpolicy="no-referrer"
+      (error)="onImageError()"
+    />
+    <div
+      *ngIf="!user.picture || imageFailed"
+      class="profile-pic profile-pic-fallback"
+      [attr.aria-label]="user.name"
+    ></div>
+    <h1 class="profile-name">{{ user.name }}</h1>
+    <p class="profile-email">{{ user.email }}</p>
+  </div>
+</div>

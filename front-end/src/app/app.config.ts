@@ -12,7 +12,8 @@ export const appConfig: ApplicationConfig = {
       domain: 'dev-hce0b3drte4jy7h4.us.auth0.com',
       clientId: 'T0t0KdBNbCKou3tdn3APxD4b1623Pq28',
       authorizationParams: {
-        redirect_uri: window.location.origin
+        redirect_uri: window.location.origin,
+        scope: 'openid profile email'
       }
     })
   ]

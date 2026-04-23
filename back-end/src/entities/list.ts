@@ -14,7 +14,7 @@ export class List {
   @Column({ name: 'LIST_DESCRIPTION', type: 'text', nullable: true })
   listDescription!: string | null;
 
-  @Column({ name: 'LIST_IMAGE', type: 'varchar', nullable: true })
+  @Column({ name: 'LIST_IMAGE', type: 'longtext', nullable: true })
   listImage!: string | null;
 
   @Column({ name: 'PUBLIC', type: 'boolean', default: true })

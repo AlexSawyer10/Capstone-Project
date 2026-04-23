@@ -11,6 +11,8 @@ export class SearchService {
 
   private apiUrl = 'http://localhost:3000/search';
 
+  /*Interesting, so BehaviorSubject caches the result. So when a user goes to a different page and clicks go back,
+  * on NgOnInit (hope i spelled that right) pulls from this result which is cached.*/
   private searchResultsSubject = new BehaviorSubject<any>(null);
   searchResults$ = this.searchResultsSubject.asObservable();
 
@@ -20,12 +22,12 @@ export class SearchService {
 
   /*Remember I set it here because I can't pass info through component to component, runs into a dependency issue*/
   setSearchResult(results: any): void {
-    this.searchResultsSubject.next(results);
+    this.searchResultsSubject.next(results); /*next is how u update the variable*/
   }
 
   /*Remember I set it here because I can't pass info through component to component, runs into a dependency issue*/
   setLearnMoreResult(results: any): void {
-    this.learnMoreResultsSubject.next(results);
+    this.learnMoreResultsSubject.next(results); /*next is how u update the variable*/
   }
 
 

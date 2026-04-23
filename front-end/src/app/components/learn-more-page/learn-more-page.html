@@ -1,32 +1,31 @@
-<div class="learn-more-page" *ngIf="results; else loadingState">
+<div class="learn-more-page" *ngIf="results(); else loadingState">
   <div
     class="hero"
-    [style.background-image]="results.background_image ? 'url(' + results.background_image + ')' : null"
+    [style.background-image]="results().background_image ? 'url(' + results().background_image + ')' : null"
   >
     <div class="hero-overlay">
-      <!--go back is a built in function that goes to the last used router destination-->
       <button type="button" class="back-btn" (click)="goBack()">&larr; Back to search</button>
 
       <div class="hero-content">
-        <h1 class="game-title">{{ results.name }}</h1>
+        <h1 class="game-title">{{ results().name }}</h1>
 
         <div class="hero-meta">
-          <span *ngIf="results.released" class="meta-pill">
-            {{ results.released | date: 'mediumDate' }}
+          <span *ngIf="results().released" class="meta-pill">
+            {{ results().released | date: 'mediumDate' }}
           </span>
-          <span *ngIf="results.playtime" class="meta-pill">
-            &#8987; {{ results.playtime }}h avg playtime
+          <span *ngIf="results().playtime" class="meta-pill">
+            &#8987; {{ results().playtime }}h avg playtime
           </span>
-          <span *ngIf="results.esrb_rating" class="meta-pill">
-            {{ results.esrb_rating.name }}
+          <span *ngIf="results().esrb_rating" class="meta-pill">
+            {{ results().esrb_rating.name }}
           </span>
         </div>
 
         <div class="hero-actions">
           <button type="button" class="primary-btn">Add to List</button>
           <a
-            *ngIf="results.website"
-            [href]="results.website"
+            *ngIf="results().website"
+            [href]="results().website"
             target="_blank"
             rel="noopener"
             class="secondary-btn"
@@ -42,99 +41,99 @@
         <span class="stat-label">Rating</span>
         <span class="stat-value">
           <span class="star">&#9733;</span>
-          {{ results.rating ? (results.rating | number: '1.1-1') : 'N/A' }}
-          <span class="stat-sub" *ngIf="results.rating_top">/ {{ results.rating_top }}</span>
+          {{ results().rating ? (results().rating | number: '1.1-1') : 'N/A' }}
+          <span class="stat-sub" *ngIf="results().rating_top">/ {{ results().rating_top }}</span>
         </span>
-        <span class="stat-sub" *ngIf="results.ratings_count">
-          {{ results.ratings_count }} ratings
+        <span class="stat-sub" *ngIf="results().ratings_count">
+          {{ results().ratings_count }} ratings
         </span>
       </div>
 
-      <div class="stat-card" *ngIf="results.metacritic !== null && results.metacritic !== undefined">
+      <div class="stat-card" *ngIf="results().metacritic !== null && results().metacritic !== undefined">
         <span class="stat-label">Metacritic</span>
-        <span class="stat-value metacritic" [class.high]="results.metacritic >= 75" [class.mid]="results.metacritic >= 50 && results.metacritic < 75" [class.low]="results.metacritic < 50">
-          {{ results.metacritic }}
+        <span class="stat-value metacritic" [class.high]="results().metacritic >= 75" [class.mid]="results().metacritic >= 50 && results().metacritic < 75" [class.low]="results().metacritic < 50">
+          {{ results().metacritic }}
         </span>
       </div>
 
-      <div class="stat-card" *ngIf="results.reviews_count">
+      <div class="stat-card" *ngIf="results().reviews_count">
         <span class="stat-label">Reviews</span>
-        <span class="stat-value">{{ results.reviews_count }}</span>
+        <span class="stat-value">{{ results().reviews_count }}</span>
       </div>
 
-      <div class="stat-card" *ngIf="results.added">
+      <div class="stat-card" *ngIf="results().added">
         <span class="stat-label">Added by</span>
-        <span class="stat-value">{{ results.added }}</span>
+        <span class="stat-value">{{ results().added }}</span>
         <span class="stat-sub">players</span>
       </div>
     </div>
 
-    <section class="section" *ngIf="results.description_raw || results.description">
+    <section class="section" *ngIf="results().description_raw || results().description">
       <h2 class="section-title">About</h2>
-      <p class="description" *ngIf="results.description_raw">{{ results.description_raw }}</p>
+      <p class="description" *ngIf="results().description_raw">{{ results().description_raw }}</p>
       <div
         class="description"
-        *ngIf="!results.description_raw && results.description"
-        [innerHTML]="results.description"
+        *ngIf="!results().description_raw && results().description"
+        [innerHTML]="results().description"
       ></div>
     </section>
 
     <div class="details-grid">
-      <section class="detail-card" *ngIf="results.genres?.length">
+      <section class="detail-card" *ngIf="results().genres?.length">
         <h3 class="detail-title">Genres</h3>
         <div class="tag-row">
-          <span class="tag" *ngFor="let g of results.genres">{{ g.name }}</span>
+          <span class="tag" *ngFor="let g of results().genres">{{ g.name }}</span>
         </div>
       </section>
 
-      <section class="detail-card" *ngIf="results.platforms?.length">
+      <section class="detail-card" *ngIf="results().platforms?.length">
         <h3 class="detail-title">Platforms</h3>
         <div class="tag-row">
-          <span class="tag" *ngFor="let p of results.platforms">{{ p.platform.name }}</span>
+          <span class="tag" *ngFor="let p of results().platforms">{{ p.platform.name }}</span>
         </div>
       </section>
 
-      <section class="detail-card" *ngIf="results.developers?.length">
+      <section class="detail-card" *ngIf="results().developers?.length">
         <h3 class="detail-title">Developers</h3>
         <div class="tag-row">
-          <span class="tag" *ngFor="let d of results.developers">{{ d.name }}</span>
+          <span class="tag" *ngFor="let d of results().developers">{{ d.name }}</span>
         </div>
       </section>
 
-      <section class="detail-card" *ngIf="results.publishers?.length">
+      <section class="detail-card" *ngIf="results().publishers?.length">
         <h3 class="detail-title">Publishers</h3>
         <div class="tag-row">
-          <span class="tag" *ngFor="let p of results.publishers">{{ p.name }}</span>
+          <span class="tag" *ngFor="let p of results().publishers">{{ p.name }}</span>
         </div>
       </section>
 
-      <section class="detail-card" *ngIf="results.tags?.length">
+      <section class="detail-card" *ngIf="results().tags?.length">
         <h3 class="detail-title">Tags</h3>
         <div class="tag-row">
-          <span class="tag muted" *ngFor="let t of results.tags.slice(0, 12)">{{ t.name }}</span>
+          <span class="tag muted" *ngFor="let t of results().tags.slice(0, 12)">{{ t.name }}</span>
         </div>
       </section>
 
-      <section class="detail-card" *ngIf="results.stores?.length">
+      <section class="detail-card" *ngIf="results().stores?.length">
         <h3 class="detail-title">Available on</h3>
         <div class="tag-row">
-          <span class="tag" *ngFor="let s of results.stores">{{ s.store.name }}</span>
+          <span class="tag" *ngFor="let s of results().stores">{{ s.store.name }}</span>
         </div>
       </section>
     </div>
 
-    <section class="section" *ngIf="results.background_image_additional">
+    <section class="section" *ngIf="results().background_image_additional">
       <h2 class="section-title">Screenshot</h2>
       <img
-        [src]="results.background_image_additional"
-        [alt]="results.name + ' screenshot'"
+        [src]="results().background_image_additional"
+        [alt]="results().name + ' screenshot'"
         class="screenshot"
       />
     </section>
 
-    <section class="rating-breakdown" *ngIf="results.ratings?.length">
+    <section class="rating-breakdown" *ngIf="results().ratings?.length">
       <h2 class="section-title">Rating breakdown</h2>
-      <div class="rating-row" *ngFor="let r of results.ratings">
+      <div class="rating-row" *ngFor="let r of results().ratings">
         <span class="rating-label">{{ r.title | titlecase }}</span>
         <div class="rating-bar">
           <div class="rating-fill" [style.width.%]="r.percent"></div>
@@ -149,7 +148,6 @@
 <ng-template #loadingState>
   <div class="loading-state">
     <p>Loading game details...</p>
-    <!--go back is a built in function that goes to the last used router destination-->
     <button type="button" class="secondary-btn" (click)="goBack()">&larr; Back to search</button>
   </div>
 </ng-template>

@@ -1,14 +1,14 @@
 <div class="search-page">
-  <div *ngIf="!results" class="empty-state">
+  <div *ngIf="!results()" class="empty-state">
     <p>Search for a game to see results.</p>
   </div>
 
-  <div *ngIf="results && results.results?.length === 0" class="empty-state">
+  <div *ngIf="results() && results().results?.length === 0" class="empty-state">
     <p>No results found.</p>
   </div>
 
-  <div *ngIf="results?.results?.length > 0" class="results-grid">
-    <div class="game-card" *ngFor="let game of results.results"> <!--so here were gonna say where that-->
+  <div *ngIf="results()?.results?.length > 0" class="results-grid">
+    <div class="game-card" *ngFor="let game of results().results"> <!--so here were gonna say where that-->
       <div class="game-image-wrapper">
         <img
           *ngIf="game.background_image"

@@ -13,7 +13,7 @@ export class LoginService {
   privateApiUrl = 'http://localhost:3000/login';
 
   loginUser(user: LoginModel): Observable<any> {
-    return this.http.post('http://localhost:3000/login', {
+    return this.http.post(`${this.privateApiUrl}`, {
       user_provider_id: user.sub,
       name: user.name,
       user_email: user.email,

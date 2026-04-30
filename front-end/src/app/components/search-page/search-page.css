@@ -144,12 +144,34 @@
   border-color: #5a5ad8;
 }
 
-.add-list-btn:hover {
+.add-list-btn:hover:not(:disabled) {
   background: #7373ff;
   border-color: #7373ff;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(115, 115, 255, 0.45);
 }
+
+.add-list-wrap {
+  position: relative;
+  flex: 1;
+  display: inline-flex;
+}
+
+.add-list-wrap--locked {
+  cursor: not-allowed;
+}
+
+.add-list-wrap--locked .add-list-btn {
+  pointer-events: none;
+}
+
+.add-list-btn:disabled {
+  opacity: 0.45;
+  cursor: inherit;
+  background: #3a3a8a;
+  border-color: #3a3a8a;
+}
+
 
 .game-btn:active {
   transform: translateY(0);

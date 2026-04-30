@@ -4,6 +4,8 @@ import {HomePage} from './components/home-page/home-page';
 import {ProfilePage} from './components/profile-page/profile-page';
 import {LearnMorePage} from './components/learn-more-page/learn-more-page';
 import {CreateListPage} from './components/create-list-page/create-list-page';
+import { ChooseListPage } from './components/choose-list-page/choose-list-page';
+import { RankListPage } from './components/rank-list-page/rank-list-page';
 
 export const routes: Routes = [
   { path: 'search-page', component: SearchPage },
@@ -11,4 +13,6 @@ export const routes: Routes = [
   {path: 'profile-page', component: ProfilePage },
   {path: 'learn-more-page', component: LearnMorePage },
   {path: 'create-list-page', component: CreateListPage },
+  { path: 'choose-list-page', component: ChooseListPage },
+  { path: 'rank-list-page', component: RankListPage },
 ];

@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@auth0/auth0-angular';
 import {FormsModule} from '@angular/forms';
@@ -17,6 +18,8 @@ import {ProfileService} from '../../service/profile.service';
 export class Navbar {
   protected readonly window = window;
   protected auth = inject(AuthService);
+  protected isAuthenticated = toSignal(this.auth.isAuthenticated$, { initialValue: false });
+  protected isLoading = toSignal(this.auth.isLoading$, { initialValue: true });
   protected isSearchOpen = signal(false);
 
   protected userSearchInput = signal<string>('');

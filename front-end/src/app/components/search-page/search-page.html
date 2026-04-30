@@ -41,7 +41,20 @@
 
         <div class="game-actions">
           <button type="button" class="game-btn learn-more-btn" (click)="learnMore(game.id)">Learn More</button>
-          <button type="button" class="game-btn add-list-btn">Add to List</button>
+          <span
+            class="add-list-wrap"
+            [class.add-list-wrap--locked]="!isAuthenticated()"
+            (click)="!isAuthenticated() && $event.preventDefault()"
+          >
+            <button
+              type="button"
+              class="game-btn add-list-btn"
+              [disabled]="!isAuthenticated()"
+              (click)="chooseList(game.id)"
+            >
+              Add to List
+            </button>
+          </span>
         </div>
       </div>
     </div>

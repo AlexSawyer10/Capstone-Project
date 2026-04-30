@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {CreateListModel} from '../model/createListModel'
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +11,20 @@ export class ListService {
   constructor(private http: HttpClient) { }
 
   privateApiUrl = 'http://localhost:3000/list';
+
+  private listResultsSubject = new BehaviorSubject<any>(null);
+  listResult$ = this.listResultsSubject.asObservable();
+
+  private gameIdSubject = new BehaviorSubject<any>(null);
+  gameIdResult$ = this.gameIdSubject.asObservable(); /*makes it a read only observable */
+
+  setGameId(gameId: number) {
+    this.gameIdSubject.next(gameId);
+  }
+
+  setListResults(results: any) {
+    this.listResultsSubject.next(results);
+  }
 
   createList(listData : CreateListModel) : Observable<any> {
     return this.http.post(`${this.privateApiUrl}`, {
@@ -22,4 +36,11 @@ export class ListService {
     });
   }
 
+  getListByUserID(user_prov : string) : Observable<any> {
+    return this.http.get(`${this.privateApiUrl}/by/user/${user_prov}`, {})
+  }
+
+  getIndividualFullList(list_ID : number) : Observable<any>{
+    return this.http.get(`${this.privateApiUrl}/individual/game/list/${list_ID}`, {});
+  }
 }

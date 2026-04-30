@@ -23,18 +23,50 @@
   </div>
   </form>
 
-  @if (auth.isLoading$ | async)
+  @if (isLoading())
   {
     <span>Loading...</span>
   }
-  @else if (auth.isAuthenticated$ | async)
-  {
-    <button class="auth-btn" (click)="transferToCreateList()">Create List</button>
-    <button class="auth-btn profile-btn" (click)="transferToLoggedProfile()">Profile</button>
-    <button class="auth-btn" (click)="auth.logout({ logoutParams: { returnTo: window.location.origin } })">Logout</button>
-  }
   @else
   {
-    <button class="auth-btn" (click)="auth.loginWithRedirect()">Login</button>
+    <div class="auth-group">
+      <span
+        class="create-list-wrap"
+        [class.create-list-wrap--locked]="!isAuthenticated()"
+        (click)="!isAuthenticated() && $event.preventDefault()"
+      >
+        <button
+          type="button"
+          class="auth-btn create-list-btn"
+          [disabled]="!isAuthenticated()"
+          (click)="transferToCreateList()"
+        >
+          Create List
+        </button>
+      </span>
+
+      @if (isAuthenticated())
+      {
+        <button class="auth-btn" (click)="transferToLoggedProfile()">Profile</button>
+        <button class="auth-btn" (click)="auth.logout({ logoutParams: { returnTo: window.location.origin } })">Logout</button>
+      }
+      @else
+      {
+        <span
+          class="create-list-wrap"
+          [class.create-list-wrap--locked]="!isAuthenticated()"
+          (click)="!isAuthenticated() && $event.preventDefault()"
+        >
+          <button
+            type="button"
+            class="auth-btn create-list-btn"
+            [disabled]="!isAuthenticated()"
+          >
+            Profile
+          </button>
+        </span>
+        <button class="auth-btn" (click)="auth.loginWithRedirect()">Login</button>
+      }
+    </div>
   }
 </nav>

@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import express from 'express';
+/*express is a js library that helps build a web server*/
 import cors from 'cors';
 import {AppDataSource} from "./db-connection.js";
 import {Comment} from "./src/entities/comment.js";

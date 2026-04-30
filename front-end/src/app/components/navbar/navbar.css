@@ -57,13 +57,39 @@ nav {
   color: white;
 }
 
-.auth-btn:hover {
+.auth-btn:hover:not(:disabled) {
   background-color: #222222;
 }
 
-.profile-btn {
-  margin-right: 80px;
-  margin-left: 40px;
+.create-list-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+
+.create-list-wrap--locked {
+  cursor: not-allowed;
+}
+
+.create-list-wrap--locked .create-list-btn {
+  pointer-events: none;
+}
+
+.auth-btn.create-list-btn:disabled {
+  opacity: 0.45;
+  cursor: inherit;
+  border-color: #888888;
+  color: #bbbbbb;
+}
+
+.auth-btn.create-list-btn:disabled:hover {
+  background-color: black;
+}
+
+.auth-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .clear-search-btn {

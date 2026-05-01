@@ -42,7 +42,7 @@ export class ChooseListPage {
     this.listService.getIndividualFullList(listId).subscribe({
       next: (response) => {
         console.log('Full list retrieved successfully:', response);
-
+        this.listService.setListResults(response);
         this.router.navigate(['/rank-list-page']);
       },
       error: (error) => {

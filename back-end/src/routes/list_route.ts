@@ -38,6 +38,20 @@ router.post("/", async (req, res) => {
     }
 });
 
+router.post("/set/slot/number/:slot/:gameID/:listID/:provID", async (req, res) => {
+   const slot_id_parsed  = parseInt(req.params.slot);
+   const game_id_parsed  = parseInt(req.params.gameID);
+
+    try {
+/*first get the list where you get that list ID*/
+    }
+    catch (err) {
+        console.error("Error assigning game to list slot:", err);
+        return res.status(500).json({ message: "Internal server error." });
+    }
+
+});
+
 router.get("/by/user/:id", async (req, res) => {
     const provider_id = req.params.id;
 

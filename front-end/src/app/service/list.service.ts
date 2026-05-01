@@ -43,4 +43,8 @@ export class ListService {
   getIndividualFullList(list_ID : number) : Observable<any>{
     return this.http.get(`${this.privateApiUrl}/individual/game/list/${list_ID}`, {});
   }
+
+  slotGame(game_ID : number, slot : number, list_ID : number, prov_ID : string) : Observable<any> {
+    return this.http.get(`${this.privateApiUrl}/set/slot/number/${slot}/${game_ID}`, {});
+  }
 }

@@ -43,7 +43,7 @@ export class SearchPage implements OnInit {
   }
 
   chooseList(id: number): void {
-    this.listService.setGameId(id);
+    this.listService.setGameId(id); /*this is NOT a call to the database. Just caching the result*/
 
     this.router.navigate(['/choose-list-page']);
   }

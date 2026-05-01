@@ -44,15 +44,7 @@ __screenshots__/
 Thumbs.db
 
 # Settings
-angular.json
-.editorconfig
-.prettierrc
-package.json
-package-lock.json
-README.md
-tsconfig.app.json
-tsconfig.json
-tsconfig.spec.json
+
 
 .idea/.gitignore
 .idea/Capstone-Project.iml

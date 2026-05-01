@@ -1,0 +1,13 @@
+.choose-slot-btn {
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.choose-slot-btn:hover {
+  background-color: #16a34a;
+}

@@ -1,1 +1,14 @@
-<p>rank-list-page works!</p>
+<div *ngFor="let slot of availableSlots">
+  <ng-container *ngIf="getGameForSlot(slot) as game; else emptySlot">
+    <div>
+      <p>#{{ slot }} {{ game.game_GAME_NAME }}</p>
+      <img *ngIf="game.game_GAME_IMAGE" [src]="game.game_GAME_IMAGE" [alt]="game.game_GAME_NAME" />
+    </div>
+  </ng-container>
+  <ng-template #emptySlot>
+    <div>
+      <p>#{{ slot }} Empty Slot</p>
+      <button class="choose-slot-btn" (click)="addGameToSlot(slot)">Choose Slot</button>
+    </div>
+  </ng-template>
+</div>

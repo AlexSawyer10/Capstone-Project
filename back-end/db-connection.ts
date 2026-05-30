@@ -12,6 +12,7 @@ dotenv.config();
 
 export const AppDataSource = new DataSource({
     type: "mysql",
+    url: process.env.MYSQL_URL,
     host: process.env.MYSQLHOST || "127.0.0.1",
     port: parseInt(process.env.MYSQLPORT || "3306"),
     username: process.env.MYSQLUSER || "root",

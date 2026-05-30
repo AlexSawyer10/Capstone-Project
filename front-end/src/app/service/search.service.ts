@@ -9,7 +9,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class SearchService {
   constructor(private http: HttpClient) { }
 
-  private apiUrl = 'http://localhost:3000/search';
+  private apiUrl = 'https://capstone-project-production-6947.up.railway.app/search';
 
   /*Interesting, so BehaviorSubject caches the result. So when a user goes to a different page and clicks go back,
   * on NgOnInit (hope i spelled that right) pulls from this result which is cached.*/
@@ -32,12 +32,18 @@ export class SearchService {
 
 
 
+
   userSearchInput(userInput : string) : Observable<any>{
     return this.http.get(`${this.apiUrl}/${userInput}`);
   }
 
   getLearnMore(Id : number) : Observable<any>{
     return this.http.get(`${this.apiUrl}/id/${Id}`);
+  }
+  /*these two functions are the same thing, just different names for code readability*/
+  getIndividualGameData(Id : number) : Observable<any>{
+    return this.http.get(`${this.apiUrl}/id/${Id}`);
+
   }
 
 

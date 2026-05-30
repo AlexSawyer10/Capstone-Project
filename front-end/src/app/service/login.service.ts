@@ -10,7 +10,7 @@ import {LoginModel} from '../model/loginModel';
 export class LoginService {
   constructor(private http: HttpClient) { }
 
-  privateApiUrl = 'http://localhost:3000/login';
+  privateApiUrl = 'https://capstone-project-production-6947.up.railway.app/login';
 
   loginUser(user: LoginModel): Observable<any> {
     return this.http.post(`${this.privateApiUrl}`, {

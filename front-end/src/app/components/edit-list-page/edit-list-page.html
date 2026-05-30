@@ -1,4 +1,7 @@
-<div class="rank-list-page">
+<div class="edit-list-page">
+  <div class="page-top-bar">
+    <button type="button" class="back-btn" (click)="goBack()">&larr; Back</button>
+  </div>
 
   @if (transferBool) {
     <div class="transfer-overlay">
@@ -12,7 +15,7 @@
     <div class="games-list">
       @for (slot of availableSlots; track slot) {
         @if (getGameForSlot(slot); as game) {
-          <div class="game-card">
+          <div class="game-card" [class.is-removing]="removing() === game.game_GAME_ID">
             <span class="rank">#{{ slot }}</span>
             @if (game.game_GAME_IMAGE) {
               <img [src]="game.game_GAME_IMAGE" [alt]="game.game_GAME_NAME" class="game-image" />
@@ -21,12 +24,16 @@
               <h2 class="game-name">{{ game.game_GAME_NAME }}</h2>
               <p class="game-released">Released: {{ game.game_GAME_RELEASED }}</p>
             </div>
+            @if (removing() === game.game_GAME_ID) {
+              <div class="removing-spinner"></div>
+            } @else {
+              <button class="remove-btn" (click)="removeGame(game.game_GAME_ID)">Remove</button>
+            }
           </div>
         } @else {
           <div class="game-card empty">
             <span class="rank">#{{ slot }}</span>
             <p class="empty-text">Empty Slot</p>
-            <button class="choose-slot-btn" (click)="addGameToSlot(slot)">Choose Slot</button>
           </div>
         }
       }

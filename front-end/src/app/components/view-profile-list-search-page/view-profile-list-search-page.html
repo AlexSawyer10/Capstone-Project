@@ -1,0 +1,30 @@
+<div class="page">
+  @if (lists().length === 0) {
+    <div class="empty-state">
+      <p>No lists found.</p>
+    </div>
+  }
+
+  <div class="lists-grid">
+    @for (list of lists(); track list.listId) {
+      <div class="list-card" (click)="transferToViewFullList(list.listId)">
+        @if (list.listImage) {
+          <img [src]="list.listImage" [alt]="list.listName" class="list-image" />
+        } @else {
+          <div class="list-image list-image-fallback"></div>
+        }
+        <div class="list-info">
+          <h2 class="list-name">{{ list.listName }}</h2>
+          <p class="list-description">{{ list.listDescription }}</p>
+          <div class="list-meta" (click)="$event.stopPropagation()">
+            <span class="vote up" [class.active]="isLiked(list.listId)" [class.vote-disabled]="!canVote()" (click)="canVote() && toggleLike(list.listId)">▲ {{ list.listLikes }}</span>
+            <span class="vote down" [class.active]="isDisliked(list.listId)" [class.vote-disabled]="!canVote()" (click)="canVote() && toggleDislike(list.listId)">▼ {{ list.listDislikes }}</span>
+            <span class="comment-btn" [class.comment-disabled]="!canVote()" aria-label="Comments">
+              <span class="comment-icon" aria-hidden="true">💬</span> {{ commentCount(list) }}
+            </span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

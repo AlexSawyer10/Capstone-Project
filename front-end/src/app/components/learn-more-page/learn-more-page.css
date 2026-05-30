@@ -81,6 +81,19 @@
   flex-wrap: wrap;
 }
 
+.add-list-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.add-list-wrap--locked {
+  cursor: not-allowed;
+}
+
+.add-list-wrap--locked .primary-btn {
+  pointer-events: none;
+}
+
 .primary-btn,
 .secondary-btn {
   padding: 10px 22px;
@@ -108,6 +121,18 @@
   border-color: #7373ff;
   transform: translateY(-1px);
   box-shadow: 0 4px 14px rgba(115, 115, 255, 0.45);
+}
+
+.primary-btn:disabled {
+  opacity: 0.45;
+  cursor: inherit;
+  background: #3a3a8a;
+  border-color: #3a3a8a;
+}
+
+.primary-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
 }
 
 .secondary-btn {

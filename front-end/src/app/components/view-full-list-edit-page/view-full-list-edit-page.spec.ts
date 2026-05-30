@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearchPage } from './search-page';
+import { ViewFullListEditPage } from './view-full-list-edit-page';
 
-describe('SearchPage', () => {
-  let component: SearchPage;
-  let fixture: ComponentFixture<SearchPage>;
+describe('ViewFullListEditPage', () => {
+  let component: ViewFullListEditPage;
+  let fixture: ComponentFixture<ViewFullListEditPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SearchPage],
+      imports: [ViewFullListEditPage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SearchPage);
+    fixture = TestBed.createComponent(ViewFullListEditPage);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

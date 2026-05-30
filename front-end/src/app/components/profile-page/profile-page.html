@@ -1,19 +1,55 @@
-<div class="profile-page" *ngIf="auth.user$ | async as user">
-  <div class="profile-card">
-    <img
-      *ngIf="user.picture && !imageFailed"
-      [src]="user.picture"
-      [alt]="user.name"
-      class="profile-pic"
-      referrerpolicy="no-referrer"
-      (error)="onImageError()"
-    />
-    <div
-      *ngIf="!user.picture || imageFailed"
-      class="profile-pic profile-pic-fallback"
-      [attr.aria-label]="user.name"
-    ></div>
-    <h1 class="profile-name">{{ user.name }}</h1>
-    <p class="profile-email">{{ user.email }}</p>
+@if (auth.user$ | async; as user) {
+  <div class="profile-page">
+    <div class="profile-card">
+      @if (user.picture && !imageFailed) {
+        <img
+          [src]="user.picture"
+          [alt]="user.name"
+          class="profile-pic"
+          referrerpolicy="no-referrer"
+          (error)="onImageError()"
+        />
+      }
+      @if (!user.picture || imageFailed) {
+        <div
+          class="profile-pic profile-pic-fallback"
+          [attr.aria-label]="user.name"
+        ></div>
+      }
+      <h1 class="profile-name">{{ user.name }}</h1>
+      <p class="profile-email">{{ user.email }}</p>
+    </div>
+
+    <div class="lists-section">
+      <h2 class="lists-title">Your Lists</h2>
+
+      @if (successMessage()) {
+        <p class="status-message success-message">{{ successMessage() }}</p>
+      }
+
+      @if (errorMessage()) {
+        <p class="status-message error-message">{{ errorMessage() }}</p>
+      }
+
+      @if (lists.length === 0) {
+        <p class="no-lists">You have no lists yet.</p>
+      }
+
+      <div class="lists-grid">
+        @for (list of lists; track list.listId) {
+          <div class="list-card">
+            <button type="button" class="delete-list-btn" (click)="transferToDeleteList(list.listId)">Delete</button>
+            @if (list.listImage) {
+              <img [src]="list.listImage" alt="List cover" class="list-image" />
+            } @else {
+              <div class="no-image">No Image</div>
+            }
+            <h3 class="list-name">{{ list.listName }}</h3>
+            <p class="list-description">{{ list.listDescription }}</p>
+            <button class="view-list-btn" (click)="transferToViewFullList(list.listId)">View List</button>
+          </div>
+        }
+      </div>
+    </div>
   </div>
-</div>
+}

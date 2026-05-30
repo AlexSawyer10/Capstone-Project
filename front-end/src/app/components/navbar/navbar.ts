@@ -3,10 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@auth0/auth0-angular';
 import {FormsModule} from '@angular/forms';
-import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {SearchService} from '../../service/search.service';
-import {ProfileService} from '../../service/profile.service';
 
 @Component({
   selector: 'app-navbar',
@@ -25,8 +22,7 @@ export class Navbar {
   protected userSearchInput = signal<string>('');
 
 
-  constructor(private http: HttpClient, private router: Router,
-              private searchService: SearchService, private profileService: ProfileService) {
+  constructor(private router: Router) {
   }
 
   protected handleSearchFocusOut(event: FocusEvent): void {
@@ -37,16 +33,21 @@ export class Navbar {
   /*so for the response we have to go back through the service because if we called another component that would be a dependency issue so we
   * have to pass it through the service*/
   public transferSearchInput(userSearchInput: string): void {
-    this.searchService.userSearchInput(userSearchInput).subscribe({
-      next: (response) => {
-        console.log('Search response from backend:', response);
-        this.searchService.setSearchResult(response);
-        this.router.navigate(['/search-page']);
-      },
-      error: (err) => {
-        console.error('Search error:', err);
-      }
-    });
+    const query = userSearchInput.trim();
+    if (!query) return;
+    this.router.navigate(['/search-games-page', query]);
+  }
+
+  public transferToHome(): void {
+    this.router.navigate(['/']);
+  }
+
+  public transferToTopLists(): void {
+    this.router.navigate(['/top-lists-page']);
+  }
+
+  public transferToWorstLists(): void {
+    this.router.navigate(['/worst-lists-page']);
   }
 
   public transferToLoggedProfile(): void {
@@ -55,5 +56,17 @@ export class Navbar {
 
   public transferToCreateList(): void {
     this.router.navigate(['/create-list-page']);
+  }
+
+  public transferProfileSearch(input: string): void {
+    const query = input.trim();
+    if (!query) return;
+    this.router.navigate(['/search-profiles-page', query]);
+  }
+
+  public transferListSearch(input: string): void {
+    const query = input.trim();
+    if (!query) return;
+    this.router.navigate(['/search-lists-page', query]);
   }
 }

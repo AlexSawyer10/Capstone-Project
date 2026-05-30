@@ -1,21 +1,28 @@
 <div class="choose-list-page">
   <h2 class="page-title">Your Lists</h2>
 
-  <div *ngIf="lists().length === 0" class="empty-state">
-    <p>You have no lists yet.</p>
-  </div>
+  @if (lists().length === 0) {
+    <div class="empty-state">
+      <p>You have no lists yet.</p>
+    </div>
+  }
 
   <div class="lists-grid">
-    <div class="list-card" *ngFor="let list of lists()">
-      <div class="list-image-wrap">
-        <img *ngIf="list.listImage" [src]="list.listImage" alt="List cover" class="list-image" />
-        <div *ngIf="!list.listImage" class="no-image">No Image</div>
+    @for (list of lists(); track list.listId) {
+      <div class="list-card">
+        <div class="list-image-wrap">
+          @if (list.listImage) {
+            <img [src]="list.listImage" alt="List cover" class="list-image" />
+          } @else {
+            <div class="no-image">No Image</div>
+          }
+        </div>
+        <div class="list-info">
+          <h3 class="list-name">{{ list.listName }}</h3>
+          <p class="list-description">{{ list.listDescription }}</p>
+          <button type="button" class="choose-btn" (click)="chosenList(list.listId)">Choose List</button>
+        </div>
       </div>
-      <div class="list-info">
-        <h3 class="list-name">{{ list.listName }}</h3>
-        <p class="list-description">{{ list.listDescription }}</p>
-        <button type="button" class="choose-btn" (click)="chosenList(list.listId)">Choose List</button>
-      </div>
-    </div>
+    }
   </div>
 </div>

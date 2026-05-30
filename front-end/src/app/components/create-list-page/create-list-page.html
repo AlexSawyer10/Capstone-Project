@@ -19,9 +19,11 @@
           maxlength="80"
         />
         <div class="field-meta">
-          <span class="field-error" *ngIf="listName().trim().length === 0">
-            List name is required.
-          </span>
+          @if (listName().trim().length === 0) {
+            <span class="field-error">
+              List name is required.
+            </span>
+          }
           <span class="char-count" [class.near-limit]="listName().length >= 70">
             {{ listName().length }}/80
           </span>
@@ -42,9 +44,11 @@
           rows="4"
         ></textarea>
         <div class="field-meta">
-          <span class="field-error" *ngIf="listDescription().trim().length === 0">
-            Description is required.
-          </span>
+          @if (listDescription().trim().length === 0) {
+            <span class="field-error">
+              Description is required.
+            </span>
+          }
           <span class="char-count" [class.near-limit]="listDescription().length >= 450">
             {{ listDescription().length }}/500
           </span>
@@ -56,27 +60,31 @@
           Cover Image <span class="optional">(optional)</span>
         </label>
 
-        <div class="image-upload-area" *ngIf="!imagePreview()">
-          <label for="listImage" class="image-upload-label">
-            <span class="upload-icon">&#128247;</span>
-            <span class="upload-text">Click to upload an image</span>
-            <span class="upload-hint">PNG, JPG, WEBP — max 5MB</span>
-          </label>
-          <input
-            id="listImage"
-            type="file"
-            accept="image/png, image/jpeg, image/webp"
-            class="file-input"
-            (change)="onImageSelected($event)"
-          />
-        </div>
+        @if (!imagePreview()) {
+          <div class="image-upload-area">
+            <label for="listImage" class="image-upload-label">
+              <span class="upload-icon">&#128247;</span>
+              <span class="upload-text">Click to upload an image</span>
+              <span class="upload-hint">PNG, JPG, WEBP — max 5MB</span>
+            </label>
+            <input
+              id="listImage"
+              type="file"
+              accept="image/png, image/jpeg, image/webp"
+              class="file-input"
+              (change)="onImageSelected($event)"
+            />
+          </div>
+        }
 
-        <div class="image-preview-wrap" *ngIf="imagePreview()">
-          <img [src]="imagePreview()" alt="Cover preview" class="image-preview" />
-          <button type="button" class="remove-image-btn" (click)="removeImage()">
-            &times; Remove
-          </button>
-        </div>
+        @if (imagePreview()) {
+          <div class="image-preview-wrap">
+            <img [src]="imagePreview()" alt="Cover preview" class="image-preview" />
+            <button type="button" class="remove-image-btn" (click)="removeImage()">
+              &times; Remove
+            </button>
+          </div>
+        }
       </div>
 
       <div class="field-group">
@@ -94,13 +102,17 @@
         </div>
       </div>
 
-      <div class="form-message success-message" *ngIf="successMessage()">
-        &#10003; {{ successMessage() }}
-      </div>
+      @if (successMessage()) {
+        <div class="form-message success-message">
+          &#10003; {{ successMessage() }}
+        </div>
+      }
 
-      <div class="form-message error-message" *ngIf="errorMessage()">
-        &#10007; {{ errorMessage() }}
-      </div>
+      @if (errorMessage()) {
+        <div class="form-message error-message">
+          &#10007; {{ errorMessage() }}
+        </div>
+      }
 
       <div class="form-actions">
         <button

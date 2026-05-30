@@ -1,9 +1,14 @@
 <nav>
+  <div class="nav-left">
+    <button class="auth-btn" (click)="transferToHome()">Home</button>
+    <button class="auth-btn" (click)="transferToTopLists()">Top Lists</button>
+    <button class="auth-btn" (click)="transferToWorstLists()">Worst Lists</button>
+  </div>
   <form (ngSubmit)="transferSearchInput(searchInput.value)">
   <div class="search-wrapper" (focusin)="isSearchOpen.set(true)" (focusout)="handleSearchFocusOut($event)">
     <div class="search-container">
       <span class="search-icon" aria-hidden="true">&#128269;</span>
-      <input #searchInput type="text" placeholder="Search For Games" aria-label="Search For Games" required />
+      <input #searchInput type="text" placeholder="Search" aria-label="Search" required />
       <button
         type="button"
         class="clear-search-btn"
@@ -16,8 +21,14 @@
 
     @if (isSearchOpen())
     {
-      <button type="submit" class="search-dropdown-item" aria-label="Submit search">
-        Search
+      <button type="submit" class="search-dropdown-item" aria-label="Search for games">
+        🎮 Search for games
+      </button>
+      <button type="button" class="search-dropdown-item" aria-label="Search for lists" (click)="transferListSearch(searchInput.value)">
+        📋 Search for lists
+      </button>
+      <button type="button" class="search-dropdown-item" aria-label="Search for profiles" (click)="transferProfileSearch(searchInput.value)">
+        👤 Search for profiles
       </button>
     }
   </div>

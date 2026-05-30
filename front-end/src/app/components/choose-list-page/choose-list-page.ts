@@ -26,7 +26,7 @@ export class ChooseListPage {
       if (!id) return;
       this.providerId.set(id);
 
-      this.listService.getListByUserID(id).subscribe({
+      this.listService.getListByProvID(id).subscribe({
         next: (response) => {
           console.log('Lists retrieved successfully:', response);
           this.lists.set(response);
@@ -39,7 +39,8 @@ export class ChooseListPage {
   }
 
   chosenList(listId: number): void {
-    this.listService.getIndividualFullList(listId).subscribe({
+    this.listService.getIndividualFullList(listId).subscribe({ /*here I get the full list of what's already in it
+                                                              its returning the list with the game table joins(s)*/
       next: (response) => {
         console.log('Full list retrieved successfully:', response);
         this.listService.setListResults(response);

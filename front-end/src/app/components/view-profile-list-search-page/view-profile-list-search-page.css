@@ -1,0 +1,160 @@
+.page {
+  padding: 40px 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.empty-state {
+  text-align: center;
+  color: #a0a0c0;
+  font-size: 1rem;
+  margin-top: 40px;
+}
+
+.lists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.list-card {
+  background: #1e1e2e;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.list-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+.list-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.list-image-fallback {
+  width: 100%;
+  height: 120px;
+  background: #2e2e3e;
+  border-radius: 8px;
+}
+
+.list-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.list-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f0f0f0;
+  margin: 0;
+}
+
+.list-description {
+  font-size: 0.82rem;
+  color: #a0a0c0;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.list-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.vote {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 2px solid;
+  background: white;
+  cursor: pointer;
+}
+
+.vote.up {
+  border-color: #22c55e;
+  color: #22c55e;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.vote.up:hover {
+  background: #22c55e;
+  color: white;
+}
+
+.vote.up.active {
+  background: #22c55e;
+  color: white;
+}
+
+.vote.down {
+  border-color: #ef4444;
+  color: #ef4444;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.vote.down:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.vote.down.active {
+  background: #ef4444;
+  color: white;
+}
+
+.vote.vote-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.vote.up.vote-disabled:hover {
+  background: white;
+  color: #22c55e;
+}
+
+.vote.down.vote-disabled:hover {
+  background: white;
+  color: #ef4444;
+}
+
+.comment-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 2px solid #3b82f6;
+  background: white;
+  color: #3b82f6;
+}
+
+.comment-icon {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.comment-btn.comment-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

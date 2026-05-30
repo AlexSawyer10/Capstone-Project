@@ -1,0 +1,77 @@
+<div class="search-page">
+  @if (query()) {
+    <h2 class="title">Results for: <strong>{{ query() }}</strong></h2>
+  }
+
+  @if (loading()) {
+    <div class="empty-state">
+      <p>Loading...</p>
+    </div>
+  } @else if (!results()) {
+    <div class="empty-state">
+      <p>Search for a game to see results.</p>
+    </div>
+  } @else if (results()?.results?.length === 0) {
+    <div class="empty-state">
+      <p>No results found for: <strong>{{ query() }}</strong></p>
+    </div>
+  } @else if (results()?.results?.length > 0) {
+    <div class="results-grid">
+      @for (game of results().results; track game.id) {
+        <div class="game-card">
+          <div class="game-image-wrapper">
+            @if (game.background_image) {
+              <img
+                [src]="game.background_image"
+                [alt]="game.name"
+                class="game-image"
+              />
+            } @else {
+              <div class="no-image">No Image</div>
+            }
+          </div>
+
+          <div class="game-info">
+            <h2 class="game-name">{{ game.name }}</h2>
+
+            <div class="game-rating">
+              <span class="star">&#9733;</span>
+              <span>{{ game.rating ? (game.rating | number: '1.1-1') : 'N/A' }}</span>
+            </div>
+
+            <div class="game-platforms">
+              @for (p of game.platforms; track p.platform.id) {
+                <span class="platform-tag">
+                  {{ p.platform.name }}
+                </span>
+              }
+              @if (!game.platforms || game.platforms.length === 0) {
+                <span class="platform-tag muted">
+                  Unknown
+                </span>
+              }
+            </div>
+
+            <div class="game-actions">
+              <button type="button" class="game-btn learn-more-btn" (click)="learnMore(game.id)">Learn More</button>
+              <span
+                class="add-list-wrap"
+                [class.add-list-wrap--locked]="!isAuthenticated()"
+                (click)="!isAuthenticated() && $event.preventDefault()"
+              >
+                <button
+                  type="button"
+                  class="game-btn add-list-btn"
+                  [disabled]="!isAuthenticated()"
+                  (click)="chooseList(game.id)"
+                >
+                  Add to List
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

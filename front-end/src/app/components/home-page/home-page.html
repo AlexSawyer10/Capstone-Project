@@ -1,1 +1,45 @@
-<p>home-page works!</p>
+<div class="home-page">
+  <section class="hero">
+    <h1 class="hero-title">Game Tier</h1>
+    <p class="hero-tagline">
+      Build ranked game lists, discover what the community loves, and share your picks with other players.
+    </p>
+    <div class="hero-actions">
+      <button type="button" class="btn btn-primary" (click)="goToTopLists()">Explore Top Lists</button>
+      @if (isAuthenticated()) {
+        <button type="button" class="btn btn-secondary" (click)="goToCreateList()">Create a List</button>
+      } @else {
+        <button type="button" class="btn btn-secondary" (click)="login()">Log In to Create</button>
+      }
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature">
+      <span class="feature-icon" aria-hidden="true">🎮</span>
+      <h2>Rank Your Games</h2>
+      <p>Search thousands of games, slot them into a top-10 list, and arrange them the way you think they deserve.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon" aria-hidden="true">📋</span>
+      <h2>Discover Lists</h2>
+      <p>Browse lists of any topic, searching by list or profile name, and find new favorites from other players.</p>
+    </div>
+    <div class="feature">
+      <span class="feature-icon" aria-hidden="true">💬</span>
+      <h2>Give your opinion</h2>
+      <p>Like, dislike, and comment on lists to display your opinion to others.</p>
+    </div>
+  </section>
+
+  <section class="explore">
+    <h2 class="section-title">Community Rankings</h2>
+    <div class="explore-links">
+      <button type="button" class="explore-link explore-top" (click)="goToTopLists()">▲ Top Lists</button>
+      <button type="button" class="explore-link explore-worst" (click)="goToWorstLists()">▼ Worst Lists</button>
+      @if (isAuthenticated()) {
+        <button type="button" class="explore-link explore-profile" (click)="goToProfile()">👤 Your Profile</button>
+      }
+    </div>
+  </section>
+</div>

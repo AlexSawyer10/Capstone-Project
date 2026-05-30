@@ -25,7 +25,10 @@
 }
 
 .list-card {
-  background: #1e1e2e;
+  background: rgba(30, 30, 60, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(90, 90, 180, 0.25);
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);

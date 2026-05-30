@@ -2,12 +2,19 @@ nav {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 12px;
+  gap: 24px;
   position: relative;
-  padding: 0 24px;
+  padding: 0 40px;
   height: 60px;
   background-color: black;
   border-bottom: 2px solid white;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-right: auto;
 }
 
 .search-container {
@@ -26,6 +33,7 @@ nav {
   transform: translateX(-50%);
   top: 8px;
   width: fit-content;
+  z-index: 1000;
 }
 
 .search-icon {
@@ -89,7 +97,7 @@ nav {
 .auth-group {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
 }
 
 .clear-search-btn {

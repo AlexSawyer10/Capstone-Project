@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" fill="none">
+  <g stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.38">
+    <circle cx="120" cy="90" r="18"/>
+    <circle cx="480" cy="160" r="14"/>
+    <circle cx="920" cy="80" r="20"/>
+    <circle cx="1340" cy="140" r="16"/>
+    <circle cx="1780" cy="100" r="12"/>
+    <circle cx="260" cy="420" r="15"/>
+    <circle cx="720" cy="380" r="22"/>
+    <circle cx="1100" cy="440" r="13"/>
+    <circle cx="1560" cy="400" r="18"/>
+    <circle cx="180" cy="780" r="17"/>
+    <circle cx="560" cy="860" r="14"/>
+    <circle cx="980" cy="820" r="19"/>
+    <circle cx="1420" cy="880" r="15"/>
+    <circle cx="1840" cy="760" r="12"/>
+    <circle cx="840" cy="620" r="11"/>
+    <circle cx="1680" cy="580" r="16"/>
+    <circle cx="400" cy="300" r="13"/>
+    <circle cx="1320" cy="720" r="17"/>
+    <circle cx="640" cy="520" r="12"/>
+
+    <rect x="340" y="70" width="32" height="32" transform="rotate(12 356 86)"/>
+    <rect x="680" y="220" width="28" height="28" transform="rotate(-8 694 234)"/>
+    <rect x="1240" y="260" width="34" height="34" transform="rotate(20 1257 277)"/>
+    <rect x="1640" y="180" width="26" height="26" transform="rotate(-15 1653 193)"/>
+    <rect x="80" y="520" width="30" height="30" transform="rotate(6 95 535)"/>
+    <rect x="420" y="640" width="36" height="36" transform="rotate(-12 438 658)"/>
+    <rect x="1280" y="560" width="28" height="28" transform="rotate(18 1294 574)"/>
+    <rect x="1720" y="920" width="32" height="32" transform="rotate(-6 1736 936)"/>
+    <rect x="1040" y="960" width="24" height="24" transform="rotate(10 1052 972)"/>
+    <rect x="620" y="1020" width="30" height="30" transform="rotate(-20 635 1035)"/>
+    <rect x="880" y="480" width="28" height="28" transform="rotate(8 894 494)"/>
+    <rect x="1520" y="960" width="30" height="30" transform="rotate(-10 1535 975)"/>
+
+    <polygon points="200,280 230,330 170,330"/>
+    <polygon points="540,480 575,530 505,530"/>
+    <polygon points="900,280 935,330 865,330"/>
+    <polygon points="1180,120 1210,170 1150,170"/>
+    <polygon points="1500,720 1535,770 1465,770"/>
+    <polygon points="1760,340 1790,390 1730,390"/>
+    <polygon points="320,920 350,970 290,970"/>
+    <polygon points="760,740 790,790 730,790"/>
+    <polygon points="1380,980 1410,1030 1350,1030"/>
+    <polygon points="60,680 90,730 30,730"/>
+    <polygon points="1000,540 1030,590 970,590"/>
+    <polygon points="460,820 490,870 430,870"/>
+
+    <line x1="440" y1="360" x2="470" y2="390"/>
+    <line x1="470" y1="360" x2="440" y2="390"/>
+    <line x1="820" y1="180" x2="848" y2="208"/>
+    <line x1="848" y1="180" x2="820" y2="208"/>
+    <line x1="1060" y1="680" x2="1090" y2="710"/>
+    <line x1="1090" y1="680" x2="1060" y2="710"/>
+    <line x1="1480" y1="420" x2="1510" y2="450"/>
+    <line x1="1510" y1="420" x2="1480" y2="450"/>
+    <line x1="240" y1="640" x2="268" y2="668"/>
+    <line x1="268" y1="640" x2="240" y2="668"/>
+    <line x1="680" y1="880" x2="708" y2="908"/>
+    <line x1="708" y1="880" x2="680" y2="908"/>
+    <line x1="1620" y1="680" x2="1648" y2="708"/>
+    <line x1="1648" y1="680" x2="1620" y2="708"/>
+    <line x1="920" y1="920" x2="948" y2="948"/>
+    <line x1="948" y1="920" x2="920" y2="948"/>
+    <line x1="1200" y1="340" x2="1228" y2="368"/>
+    <line x1="1228" y1="340" x2="1200" y2="368"/>
+    <line x1="380" y1="180" x2="408" y2="208"/>
+    <line x1="408" y1="180" x2="380" y2="208"/>
+    <line x1="1140" y1="860" x2="1168" y2="888"/>
+    <line x1="1168" y1="860" x2="1140" y2="888"/>
+    <line x1="520" y1="120" x2="548" y2="148"/>
+    <line x1="548" y1="120" x2="520" y2="148"/>
+  </g>
+</svg>

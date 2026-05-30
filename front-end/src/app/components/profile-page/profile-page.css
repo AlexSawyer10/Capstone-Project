@@ -1,11 +1,15 @@
 .profile-page {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   padding: 60px 24px;
 }
 
 .profile-card {
-  background: #1e1e2e;
+  background: rgba(30, 30, 60, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(90, 90, 180, 0.25);
   border-radius: 16px;
   padding: 40px;
   display: flex;
@@ -48,4 +52,128 @@
   font-size: 0.95rem;
   color: #a0a0c0;
   margin: 0;
+}
+
+.lists-section {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 40px;
+  padding: 0 24px;
+}
+
+.lists-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #f0f0f0;
+  margin-bottom: 20px;
+}
+
+.status-message {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin: 0 0 16px;
+}
+
+.success-message {
+  background: rgba(46, 125, 50, 0.2);
+  border: 1px solid #2e7d32;
+  color: #81c784;
+}
+
+.error-message {
+  background: rgba(179, 38, 30, 0.2);
+  border: 1px solid #b3261e;
+  color: #ef9a9a;
+}
+
+.no-lists {
+  color: #a0a0c0;
+  font-size: 0.95rem;
+}
+
+.lists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.list-card {
+  position: relative;
+  background: rgba(30, 30, 60, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(90, 90, 180, 0.25);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.list-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.no-image {
+  width: 100%;
+  height: 120px;
+  background: #2e2e3e;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a0a0c0;
+  font-size: 0.85rem;
+}
+
+.list-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f0f0f0;
+  margin: 0;
+}
+
+.list-description {
+  font-size: 0.85rem;
+  color: #a0a0c0;
+  margin: 0;
+}
+
+.view-list-btn {
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.view-list-btn:hover {
+  background-color: #16a34a;
+}
+
+.delete-list-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.delete-list-btn:hover {
+  background-color: #dc2626;
 }

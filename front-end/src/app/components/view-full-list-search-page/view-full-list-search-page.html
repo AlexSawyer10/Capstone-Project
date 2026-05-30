@@ -1,0 +1,177 @@
+@if (listInfo()) {
+  <div class="view-full-list-search-page">
+    <div class="page-top-bar">
+      <button type="button" class="back-btn" (click)="goBack()">&larr; Back</button>
+    </div>
+
+    <div class="page">
+    <div class="list-header">
+      <h1 class="list-name">{{ listInfo().list_LIST_NAME }}</h1>
+      <p class="list-description">{{ listInfo().list_LIST_DESCRIPTION }}</p>
+      <div class="list-meta">
+        <button type="button" class="vote-btn up" [class.active]="liked()" [disabled]="!canVote()" (click)="toggleLike()">
+          ▲ {{ listInfo().list_LIST_LIKES }}
+        </button>
+        <button type="button" class="vote-btn down" [class.active]="disliked()" [disabled]="!canVote()" (click)="toggleDislike()">
+          ▼ {{ listInfo().list_LIST_DISLIKES }}
+        </button>
+        <button type="button" class="comment-btn" aria-label="Jump to comments" [disabled]="!canVote()" (click)="scrollToComments()">
+          <span class="comment-icon" aria-hidden="true">💬</span> {{ commentCount() }}
+        </button>
+      </div>
+    </div>
+
+    <div class="games-list">
+      @for (slot of availableSlots; track slot) {
+        @if (getGameForSlot(slot); as game) {
+          <div class="game-card">
+            <span class="rank">#{{ slot }}</span>
+            @if (game.game_GAME_IMAGE) {
+              <img [src]="game.game_GAME_IMAGE" [alt]="game.game_GAME_NAME" class="game-image" />
+            }
+            <div class="game-info">
+              <h2 class="game-name">{{ game.game_GAME_NAME }}</h2>
+              <p class="game-released">Released: {{ game.game_GAME_RELEASED }}</p>
+              <p class="game-description" [innerHTML]="game.game_GAME_DESCRIPTION"></p>
+              <button class="learn-more-btn" (click)="transferToLearnMore(game.game_GAME_ID)">Learn More</button>
+            </div>
+          </div>
+        } @else {
+          <div class="game-card empty">
+            <span class="rank">#{{ slot }}</span>
+            <p class="empty-text">Empty Slot</p>
+          </div>
+        }
+      }
+    </div>
+
+    @if (auth.user$ | async; as user) {
+      <section class="comment-section" id="comments-section">
+        <div class="comment-compose">
+          <div class="comment-user">
+            @if (user.picture && !imageFailed) {
+              <img
+                [src]="user.picture"
+                [alt]="user.name"
+                class="comment-profile-pic"
+                referrerpolicy="no-referrer"
+                (error)="onImageError()"
+              />
+            } @else {
+              <div class="comment-profile-pic comment-profile-pic-fallback" [attr.aria-label]="user.name"></div>
+            }
+            <div class="comment-user-info">
+              <p class="comment-user-name">{{ user.name }}</p>
+              <p class="comment-user-email">{{ user.email }}</p>
+            </div>
+          </div>
+          <div class="comment-input-wrap">
+            <textarea
+              class="comment-input"
+              placeholder="Write a comment..."
+              [value]="commentText()"
+              (input)="commentText.set($any($event.target).value)"
+              rows="4"
+              maxlength="400"
+            ></textarea>
+            <button type="button" class="comment-submit-btn" (click)="submitComment()">Submit</button>
+          </div>
+        </div>
+
+        @if (comments().length) {
+          <div class="existing-comments">
+            @for (comment of comments(); track comment.commentId) {
+              <div class="existing-comment">
+                @if (comment.userPicture && !failedCommentImages()[comment.commentId]) {
+                  <img
+                    [src]="comment.userPicture"
+                    [alt]="comment.name"
+                    class="existing-comment-pic"
+                    referrerpolicy="no-referrer"
+                    (error)="onCommentImageError(comment.commentId)"
+                  />
+                } @else {
+                  <div class="existing-comment-pic existing-comment-pic-fallback" [attr.aria-label]="comment.name"></div>
+                }
+                <div class="existing-comment-body">
+                  <p class="existing-comment-name">{{ comment.name }}</p>
+                  <p class="existing-comment-email">{{ comment.userEmail }}</p>
+                  <p class="existing-comment-text">{{ comment.commentDescription }}</p>
+                  <div class="comment-vote-meta">
+                    <button
+                      type="button"
+                      class="vote-btn up comment-vote-btn"
+                      [class.active]="isCommentLiked(comment.commentId)"
+                      [disabled]="!canVote()"
+                      (click)="toggleCommentLike(comment.commentId)"
+                    >
+                      ▲ {{ comment.commentLikes }}
+                    </button>
+                    <button
+                      type="button"
+                      class="vote-btn down comment-vote-btn"
+                      [class.active]="isCommentDisliked(comment.commentId)"
+                      [disabled]="!canVote()"
+                      (click)="toggleCommentDislike(comment.commentId)"
+                    >
+                      ▼ {{ comment.commentDislikes }}
+                    </button>
+                  </div>
+                </div>
+                @if (comment.isOwnComment) {
+                  <button type="button" class="comment-delete-btn" (click)="deleteComment(comment.commentId)">Delete</button>
+                }
+              </div>
+            }
+          </div>
+        }
+      </section>
+    } @else if (comments().length) {
+      <section class="comment-section" id="comments-section">
+        <div class="existing-comments no-border">
+          @for (comment of comments(); track comment.commentId) {
+            <div class="existing-comment">
+              @if (comment.userPicture && !failedCommentImages()[comment.commentId]) {
+                <img
+                  [src]="comment.userPicture"
+                  [alt]="comment.name"
+                  class="existing-comment-pic"
+                  referrerpolicy="no-referrer"
+                  (error)="onCommentImageError(comment.commentId)"
+                />
+              } @else {
+                <div class="existing-comment-pic existing-comment-pic-fallback" [attr.aria-label]="comment.name"></div>
+              }
+              <div class="existing-comment-body">
+                <p class="existing-comment-name">{{ comment.name }}</p>
+                <p class="existing-comment-email">{{ comment.userEmail }}</p>
+                <p class="existing-comment-text">{{ comment.commentDescription }}</p>
+                <div class="comment-vote-meta">
+                  <button
+                    type="button"
+                    class="vote-btn up comment-vote-btn"
+                    [class.active]="isCommentLiked(comment.commentId)"
+                    [disabled]="!canVote()"
+                    (click)="toggleCommentLike(comment.commentId)"
+                  >
+                    ▲ {{ comment.commentLikes }}
+                  </button>
+                  <button
+                    type="button"
+                    class="vote-btn down comment-vote-btn"
+                    [class.active]="isCommentDisliked(comment.commentId)"
+                    [disabled]="!canVote()"
+                    (click)="toggleCommentDislike(comment.commentId)"
+                  >
+                    ▼ {{ comment.commentDislikes }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    }
+    </div>
+  </div>
+}

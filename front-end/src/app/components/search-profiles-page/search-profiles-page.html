@@ -1,0 +1,26 @@
+<div class="page">
+  <h2 class="title">Profile Search Results</h2>
+
+  @if (results.length === 0) {
+    <p class="no-results">
+      No users found with: <strong>{{ query }}</strong>
+    </p>
+  }
+
+  <div class="profiles-list">
+    @for (user of results; track user.userId) {
+      <div class="profile-card">
+        @if (user.userPicture) {
+          <img [src]="user.userPicture" [alt]="user.name" class="profile-pic" referrerpolicy="no-referrer" />
+        } @else {
+          <div class="profile-pic profile-pic-fallback"></div>
+        }
+        <div class="profile-info">
+          <p class="profile-name">{{ user.name }}</p>
+          <p class="profile-email">{{ user.userEmail }}</p>
+          <button (click)="transferToProfile(user.userId)">View Lists</button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

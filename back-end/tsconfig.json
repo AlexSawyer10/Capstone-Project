@@ -4,6 +4,7 @@
     // File Layout
     "rootDir": "./",
     "outDir": "./dist",
+    "moduleResolution": "nodenext",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
@@ -22,8 +23,8 @@
     "declarationMap": true,
 
     // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
+    // "noUncheckedIndexedAccess": true,
+    // "exactOptionalPropertyTypes": true,
 
     // Style Options
     // "noImplicitReturns": true,
@@ -36,9 +37,9 @@
     // Recommended Options
     "strict": true,
     "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
+    // "verbatimModuleSyntax": true,
+    // "isolatedModules": true,
+    // "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
   }

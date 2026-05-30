@@ -5,7 +5,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --loader ts-node/esm index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "node --loader ts-node/esm index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,15 +15,17 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.6",
+    "dotenv": "^16.4.5",
     "express": "^5.2.1",
     "mysql2": "^3.20.0",
     "reflect-metadata": "^0.2.2",
-    "typeorm": "^0.3.28"
+    "typeorm": "^0.3.28",
+    "typescript": "^6.0.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "ts-node": "^10.9.2",
-    "typescript": "^6.0.2"
+    "@types/node": "^22.0.0",
+    "ts-node": "^10.9.2"
   }
 }

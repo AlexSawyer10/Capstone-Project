@@ -135,6 +135,21 @@
   to { transform: rotate(360deg); }
 }
 
+@media (max-width: 640px) {
+  .page-top-bar {
+    padding: 16px 16px 0;
+  }
+
+  .game-card {
+    gap: 10px;
+  }
+
+  .game-image {
+    width: 80px;
+    height: 56px;
+  }
+}
+
 .transfer-overlay {
   position: fixed;
   inset: 0;

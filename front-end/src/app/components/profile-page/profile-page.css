@@ -177,3 +177,20 @@
 .delete-list-btn:hover {
   background-color: #dc2626;
 }
+
+@media (max-width: 640px) {
+  .profile-page {
+    padding: 32px 16px;
+  }
+
+  .profile-card {
+    padding: 28px 20px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .lists-section {
+    padding: 0 0;
+  }
+}

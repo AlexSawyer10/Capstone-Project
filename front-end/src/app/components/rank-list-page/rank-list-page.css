@@ -131,3 +131,19 @@
   line-height: 1.5;
 }
 
+@media (max-width: 640px) {
+  .game-card {
+    gap: 10px;
+  }
+
+  .game-image {
+    width: 80px;
+    height: 56px;
+  }
+
+  .rank {
+    font-size: 1.2rem;
+    min-width: 28px;
+  }
+}
+

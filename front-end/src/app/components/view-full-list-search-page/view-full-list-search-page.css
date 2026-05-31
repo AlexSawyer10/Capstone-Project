@@ -438,3 +438,48 @@
 .comment-delete-btn:hover {
   background: #dc2626;
 }
+
+@media (max-width: 640px) {
+  .page-top-bar {
+    padding: 16px 16px 0;
+  }
+
+  .list-name {
+    font-size: 1.5rem;
+  }
+
+  .list-meta {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .game-card {
+    gap: 10px;
+  }
+
+  .game-image {
+    width: 80px;
+    height: 56px;
+  }
+
+  .comment-compose {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .comment-user {
+    flex-direction: row;
+    min-width: 0;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .comment-user-info {
+    text-align: left;
+  }
+
+  .comment-profile-pic {
+    width: 44px;
+    height: 44px;
+  }
+}

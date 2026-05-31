@@ -13,7 +13,13 @@ import {commentRouter} from "./src/routes/comment_route.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:4200' }));
+const allowedOrigins = [
+  'http://localhost:4200',
+  'https://gametier.net',
+  'https://www.gametier.net',
+  'https://capstone-project-beta-neon.vercel.app',
+];
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json({ limit: '5mb' })); /*this is to limit the size of the json data
                                           that can be sent to the server, previously the image made it
                                           unable to send so I manually bump up the amount it can take here*/

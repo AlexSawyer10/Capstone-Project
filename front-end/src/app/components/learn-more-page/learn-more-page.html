@@ -38,6 +38,7 @@
                 type="button"
                 class="primary-btn"
                 [disabled]="!isLoggedIn()"
+                (click)="chooseList(results().id)"
               >
                 Add to List
               </button>

@@ -66,5 +66,3 @@ CREATE TABLE LIST_GAME(
 
 
 
-
-

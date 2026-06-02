@@ -1,38 +1,30 @@
-import {Game} from "../entities/game.js";
-import {ListLikes} from "../entities/list_likes.js";
-import {CommentLikes} from "../entities/comment_likes.js";
-
-export { router as listRouter }
-
-import {List} from "../entities/list.js";
-import {User} from "../entities/user.js";
-import {ListGame} from "../entities/list_game.js";
-import {Comment} from "../entities/comment.js";
+import { Game } from "../entities/game.js";
+import { ListLikes } from "../entities/list_likes.js";
+import { CommentLikes } from "../entities/comment_likes.js";
+export { router as listRouter };
+import { List } from "../entities/list.js";
+import { User } from "../entities/user.js";
+import { ListGame } from "../entities/list_game.js";
+import { Comment } from "../entities/comment.js";
 import express from "express";
 import { In } from "typeorm";
-import {AppDataSource} from "../../db-connection.js";
-
+import { AppDataSource } from "../../db-connection.js";
 const router = express.Router();
-
-function isVoteLiked(value: boolean | null | number | undefined): boolean {
+function isVoteLiked(value) {
     return value === true || value === 1;
 }
-
-function isVoteDisliked(value: boolean | null | number | undefined): boolean {
+function isVoteDisliked(value) {
     return value === false || value === 0;
 }
-
-function isVoteNeutral(value: boolean | null | number | undefined): boolean {
+function isVoteNeutral(value) {
     return value === null || value === undefined;
 }
-
-async function getCommentsForList(listId: number, viewerProvId?: string) {
-    let viewerUserId: number | null = null;
+async function getCommentsForList(listId, viewerProvId) {
+    let viewerUserId = null;
     if (viewerProvId) {
         const viewer = await AppDataSource.getRepository(User).findOneBy({ userProviderId: viewerProvId });
         viewerUserId = viewer?.userId ?? null;
     }
-
     const rows = await AppDataSource.getRepository(Comment)
         .createQueryBuilder("comment")
         .innerJoin(User, "user", "user.userId = comment.userId")
@@ -47,8 +39,7 @@ async function getCommentsForList(listId: number, viewerProvId?: string) {
         .where("comment.listId = :listId", { listId })
         .orderBy("comment.commentId", "DESC")
         .getRawMany();
-
-    const voteByCommentId: Record<number, { liked: boolean; disliked: boolean }> = {};
+    const voteByCommentId = {};
     if (viewerUserId != null) {
         const commentIds = rows.map((row) => Number(row.commentId));
         if (commentIds.length > 0) {
@@ -58,7 +49,6 @@ async function getCommentsForList(listId: number, viewerProvId?: string) {
                 .where("cl.userId = :userId", { userId: viewerUserId })
                 .andWhere("cl.commentId IN (:...commentIds)", { commentIds })
                 .getMany();
-
             for (const vote of voteRows) {
                 voteByCommentId[vote.commentId] = {
                     liked: isVoteLiked(vote.isLiked),
@@ -67,7 +57,6 @@ async function getCommentsForList(listId: number, viewerProvId?: string) {
             }
         }
     }
-
     return rows.map((row) => {
         const commentId = Number(row.commentId);
         const vote = voteByCommentId[commentId];
@@ -85,53 +74,44 @@ async function getCommentsForList(listId: number, viewerProvId?: string) {
         };
     });
 }
-
 router.post("/", async (req, res) => {
     const { provider_id, list_name, list_description, list_image, public: isPublic } = req.body;
-
     try {
         const user = await AppDataSource.getRepository(User).findOneBy({ userProviderId: provider_id });
-
         if (!user) {
             return res.status(404).json({ message: "User not found." });
         }
-
         const newList = new List();
         newList.userId = user.userId;
         newList.listName = list_name;
         newList.listDescription = list_description;
         newList.listImage = list_image ?? null;
         newList.public = isPublic;
-
         await AppDataSource.getRepository(List).save(newList);
         console.log("List saved to the database.");
         return res.status(201).json({ message: "List created successfully." });
-
     }
     catch (err) {
         console.error("Error creating list:", err);
         return res.status(500).json({ message: "Internal server error." });
     }
 });
-
 router.post("/set/slot/number/:slot/:gameID/:listID/:provID/:gameName/:gameReleased/:gameDescription/:gameImage", async (req, res) => {
-   const slot_id_parsed  = parseInt(req.params.slot);
-   const game_id_parsed  = parseInt(req.params.gameID);
-   const list_id_parsed  = parseInt(req.params.listID);
-   const prov_id         = req.params.provID;
-   const game_name       = decodeURIComponent(req.params.gameName);
-   const game_released   = req.params.gameReleased;
-   const game_description_raw = decodeURIComponent(req.params.gameDescription);
-   const game_description = game_description_raw === '_' ? '' : game_description_raw;
-   const game_image      = decodeURIComponent(req.params.gameImage);
-
+    const slot_id_parsed = parseInt(req.params.slot);
+    const game_id_parsed = parseInt(req.params.gameID);
+    const list_id_parsed = parseInt(req.params.listID);
+    const prov_id = req.params.provID;
+    const game_name = decodeURIComponent(req.params.gameName);
+    const game_released = req.params.gameReleased;
+    const game_description_raw = decodeURIComponent(req.params.gameDescription);
+    const game_description = game_description_raw === '_' ? '' : game_description_raw;
+    const game_image = decodeURIComponent(req.params.gameImage);
     /*first check to see if that list ID is = to the user with the provider ID if not return an error. then
      check to see if that list id and game ID is already in list_game table (in the same row), if not
      create a new row in the game table with the game info then insert the new list_game info. You make the game table first
      because the list_game table has to reference a valid game foreign key.
      and the list_game_rank (which is the slot). Then place the game information coming in into the game table  */
     /*if that list id and game id are already there, update only the LIST_GAME table with  the new info coming in*/
-
     console.log("params:", { slot_id_parsed, game_id_parsed, list_id_parsed, prov_id, game_name, game_released, game_description, game_image });
     try {
         /*first check to see if that list ID is = to the user with the provider ID if not return an error. then
@@ -140,22 +120,17 @@ router.post("/set/slot/number/:slot/:gameID/:listID/:provID/:gameName/:gameRelea
          because the list_game table has to reference a valid game foreign key.
          and the list_game_rank (which is the slot). Then place the game information coming in into the game table  */
         /*if that list id and game id are already there, update only the LIST_GAME table with  the new info coming in*/
-
         const user = await AppDataSource.getRepository(User).findOneBy({ userProviderId: prov_id });
         if (!user) {
             return res.status(404).json({ message: "User not found." });
         }
-
         const list = await AppDataSource.getRepository(List).findOneBy({ listId: list_id_parsed });
-
-        console.log(list?.userId)
-        console.log(user.userProviderId)
-        console.log(user.userId)
-
+        console.log(list?.userId);
+        console.log(user.userProviderId);
+        console.log(user.userId);
         if (!list || list.userId !== user.userId) {
             return res.status(403).json({ message: "List not found or does not belong to this user." });
         }
-
         const existingGame = await AppDataSource.getRepository(Game).findOneBy({ gameId: game_id_parsed });
         if (!existingGame) {
             const newGame = new Game();
@@ -166,46 +141,38 @@ router.post("/set/slot/number/:slot/:gameID/:listID/:provID/:gameName/:gameRelea
             newGame.gameImage = game_image;
             await AppDataSource.getRepository(Game).save(newGame);
         }
-
         const existingListGame = await AppDataSource.getRepository(ListGame).findOneBy({
             gameId: game_id_parsed,
             listId: list_id_parsed,
         });
-
         if (existingListGame) {
             existingListGame.listGameRank = slot_id_parsed;
             await AppDataSource.getRepository(ListGame).save(existingListGame);
-        } else {
+        }
+        else {
             const newListGame = new ListGame();
             newListGame.gameId = game_id_parsed;
             newListGame.listId = list_id_parsed;
             newListGame.listGameRank = slot_id_parsed;
             await AppDataSource.getRepository(ListGame).save(newListGame);
         }
-
         return res.status(200).json({ message: "Game assigned to slot successfully." });
     }
     catch (err) {
         console.error("Error assigning game to list slot:", err);
         return res.status(500).json({ message: "Internal server error." });
     }
-
 });
-
 router.get("/by/prov/:id", async (req, res) => {
     const provider_id = req.params.id;
-
     try {
         const user = await AppDataSource.getRepository(User).findOneBy({ userProviderId: provider_id });
-
         if (!user) {
             return res.status(404).json({ message: "User not found." });
         }
-
         const lists = await AppDataSource.getRepository(List).find({
             where: { userId: user.userId },
         });
-
         return res.status(200).json(lists);
     }
     catch (err) {
@@ -213,19 +180,15 @@ router.get("/by/prov/:id", async (req, res) => {
         return res.status(500).json({ message: "Internal server error." });
     }
 });
-
 router.get("/by/user/id/:userId", async (req, res) => {
     const userId = parseInt(req.params.userId);
-
     try {
         const lists = await AppDataSource.getRepository(List).find({
             where: { userId: userId },
         });
-
         if (lists.length === 0) {
             return res.status(200).json([]);
         }
-
         const listIds = lists.map((list) => list.listId);
         const commentCountRows = await AppDataSource.getRepository(Comment)
             .createQueryBuilder("comment")
@@ -234,17 +197,14 @@ router.get("/by/user/id/:userId", async (req, res) => {
             .where("comment.listId IN (:...listIds)", { listIds })
             .groupBy("comment.listId")
             .getRawMany();
-
-        const countByListId: Record<number, number> = {};
+        const countByListId = {};
         for (const row of commentCountRows) {
             countByListId[Number(row.listId)] = Number(row.commentCount);
         }
-
         const listsWithCommentCounts = lists.map((list) => ({
             ...list,
             commentCount: countByListId[list.listId] ?? 0,
         }));
-
         return res.status(200).json(listsWithCommentCounts);
     }
     catch (err) {
@@ -252,7 +212,6 @@ router.get("/by/user/id/:userId", async (req, res) => {
         return res.status(500).json({ message: "Internal server error." });
     }
 });
-
 router.get("/top", async (_req, res) => {
     try {
         const lists = await AppDataSource.getRepository(List).find({
@@ -260,11 +219,9 @@ router.get("/top", async (_req, res) => {
             order: { listLikes: "DESC" },
             take: 50,
         });
-
         if (lists.length === 0) {
             return res.status(200).json([]);
         }
-
         const listIds = lists.map((list) => list.listId);
         const commentCountRows = await AppDataSource.getRepository(Comment)
             .createQueryBuilder("comment")
@@ -273,22 +230,18 @@ router.get("/top", async (_req, res) => {
             .where("comment.listId IN (:...listIds)", { listIds })
             .groupBy("comment.listId")
             .getRawMany();
-
-        const countByListId: Record<number, number> = {};
+        const countByListId = {};
         for (const row of commentCountRows) {
             countByListId[Number(row.listId)] = Number(row.commentCount);
         }
-
         const userIds = [...new Set(lists.map((list) => list.userId))];
         const users = await AppDataSource.getRepository(User).find({
             where: { userId: In(userIds) },
         });
-
-        const userById: Record<number, User> = {};
+        const userById = {};
         for (const user of users) {
             userById[user.userId] = user;
         }
-
         const listsWithCommentCounts = lists.map((list) => ({
             ...list,
             commentCount: countByListId[list.listId] ?? 0,
@@ -296,7 +249,6 @@ router.get("/top", async (_req, res) => {
             ownerEmail: userById[list.userId]?.userEmail ?? null,
             ownerPicture: userById[list.userId]?.userPicture ?? null,
         }));
-
         return res.status(200).json(listsWithCommentCounts);
     }
     catch (err) {
@@ -304,7 +256,6 @@ router.get("/top", async (_req, res) => {
         return res.status(500).json({ message: "Internal server error." });
     }
 });
-
 router.get("/worst", async (_req, res) => {
     try {
         const lists = await AppDataSource.getRepository(List).find({
@@ -312,11 +263,9 @@ router.get("/worst", async (_req, res) => {
             order: { listDislikes: "DESC" },
             take: 50,
         });
-
         if (lists.length === 0) {
             return res.status(200).json([]);
         }
-
         const listIds = lists.map((list) => list.listId);
         const commentCountRows = await AppDataSource.getRepository(Comment)
             .createQueryBuilder("comment")
@@ -325,22 +274,18 @@ router.get("/worst", async (_req, res) => {
             .where("comment.listId IN (:...listIds)", { listIds })
             .groupBy("comment.listId")
             .getRawMany();
-
-        const countByListId: Record<number, number> = {};
+        const countByListId = {};
         for (const row of commentCountRows) {
             countByListId[Number(row.listId)] = Number(row.commentCount);
         }
-
         const userIds = [...new Set(lists.map((list) => list.userId))];
         const users = await AppDataSource.getRepository(User).find({
             where: { userId: In(userIds) },
         });
-
-        const userById: Record<number, User> = {};
+        const userById = {};
         for (const user of users) {
             userById[user.userId] = user;
         }
-
         const listsWithCommentCounts = lists.map((list) => ({
             ...list,
             commentCount: countByListId[list.listId] ?? 0,
@@ -348,7 +293,6 @@ router.get("/worst", async (_req, res) => {
             ownerEmail: userById[list.userId]?.userEmail ?? null,
             ownerPicture: userById[list.userId]?.userPicture ?? null,
         }));
-
         return res.status(200).json(listsWithCommentCounts);
     }
     catch (err) {
@@ -356,40 +300,29 @@ router.get("/worst", async (_req, res) => {
         return res.status(500).json({ message: "Internal server error." });
     }
 });
-
 router.get("/search/:query", async (req, res) => {
     const query = decodeURIComponent(req.params.query).trim();
-
     try {
         if (!query) {
             return res.status(200).json([]);
         }
-
         const likeQuery = `%${query}%`;
-
         const listIdRows = await AppDataSource.getRepository(List)
             .createQueryBuilder("list")
             .select("DISTINCT list.listId", "listId")
             .leftJoin(ListGame, "lg", "lg.listId = list.listId")
             .leftJoin(Game, "game", "game.gameId = lg.gameId")
             .where("list.public = :isPublic", { isPublic: true })
-            .andWhere(
-                "(list.listName LIKE :q OR list.listDescription LIKE :q OR game.gameName LIKE :q)",
-                { q: likeQuery }
-            )
+            .andWhere("(list.listName LIKE :q OR list.listDescription LIKE :q OR game.gameName LIKE :q)", { q: likeQuery })
             .getRawMany();
-
         const listIds = listIdRows.map((row) => Number(row.listId));
-
         if (listIds.length === 0) {
             return res.status(200).json([]);
         }
-
         const lists = await AppDataSource.getRepository(List).find({
             where: { listId: In(listIds), public: true },
             order: { listLikes: "DESC" },
         });
-
         const commentCountRows = await AppDataSource.getRepository(Comment)
             .createQueryBuilder("comment")
             .select("comment.listId", "listId")
@@ -397,22 +330,18 @@ router.get("/search/:query", async (req, res) => {
             .where("comment.listId IN (:...listIds)", { listIds })
             .groupBy("comment.listId")
             .getRawMany();
-
-        const countByListId: Record<number, number> = {};
+        const countByListId = {};
         for (const row of commentCountRows) {
             countByListId[Number(row.listId)] = Number(row.commentCount);
         }
-
         const userIds = [...new Set(lists.map((list) => list.userId))];
         const users = await AppDataSource.getRepository(User).find({
             where: { userId: In(userIds) },
         });
-
-        const userById: Record<number, User> = {};
+        const userById = {};
         for (const user of users) {
             userById[user.userId] = user;
         }
-
         const listsWithMetadata = lists.map((list) => ({
             ...list,
             commentCount: countByListId[list.listId] ?? 0,
@@ -420,7 +349,6 @@ router.get("/search/:query", async (req, res) => {
             ownerEmail: userById[list.userId]?.userEmail ?? null,
             ownerPicture: userById[list.userId]?.userPicture ?? null,
         }));
-
         return res.status(200).json(listsWithMetadata);
     }
     catch (err) {
@@ -428,7 +356,6 @@ router.get("/search/:query", async (req, res) => {
         return res.status(500).json({ message: "Internal server error." });
     }
 });
-
 router.get("/individual/game/list/:listId", async (req, res) => {
     const listIdParsed = parseInt(req.params.listId);
     const viewerProvId = typeof req.query.provId === "string" ? req.query.provId : undefined;
@@ -440,38 +367,35 @@ router.get("/individual/game/list/:listId", async (req, res) => {
         const listWithGames = await AppDataSource
             .createQueryBuilder()
             .select([
-                'list.listId',
-                'list.listName',
-                'list.listDescription',
-                'list.listImage',
-                'list.public',
-                'list.listLikes',
-                'list.listDislikes',
-                'lg.listGameRank',
-                'lg.listGameStatus',
-                'game.gameId',
-                'game.gameName',
-                'game.gameReleased',
-                'game.gameDescription',
-                'game.gameImage',
-            ])
+            'list.listId',
+            'list.listName',
+            'list.listDescription',
+            'list.listImage',
+            'list.public',
+            'list.listLikes',
+            'list.listDislikes',
+            'lg.listGameRank',
+            'lg.listGameStatus',
+            'game.gameId',
+            'game.gameName',
+            'game.gameReleased',
+            'game.gameDescription',
+            'game.gameImage',
+        ])
             .addSelect((subQuery) => {
-                return subQuery
-                    .select('COUNT(c.commentId)')
-                    .from(Comment, 'c')
-                    .where('c.listId = list.listId');
-            }, 'commentCount')
+            return subQuery
+                .select('COUNT(c.commentId)')
+                .from(Comment, 'c')
+                .where('c.listId = list.listId');
+        }, 'commentCount')
             .from(List, 'list')
             .leftJoin(ListGame, 'lg', 'lg.listId = list.listId')
             .leftJoin(Game, 'game', 'game.gameId = lg.gameId')
             .where('list.listId = :listId', { listId: listIdParsed })
             .getRawMany();
-
         console.log("list with game list:", listWithGames);
         console.log("commentCount from subquery (first row):", listWithGames[0]?.commentCount);
-
         const comments = await getCommentsForList(listIdParsed, viewerProvId);
-
         return res.status(200).json({ listWithGames, comments });
     }
     catch (err) {
@@ -479,63 +403,54 @@ router.get("/individual/game/list/:listId", async (req, res) => {
         return res.status(500).json({ message: "Internal server error." });
     }
 });
-
 router.get("/number/of/comments/:listId", async (req, res) => {
     const listIdParsed = parseInt(req.params.listId);
-
-    try{
-        const list = await AppDataSource.getRepository(List).find({})
-
+    try {
+        const list = await AppDataSource.getRepository(List).find({});
         const commentCount = await AppDataSource.createQueryBuilder()
             .select("COUNT(*)", "count")
             .from("COMMENT", "comment")
             .where("comment.LIST_ID = :listId", { listId: listIdParsed })
             .getRawOne();
     }
-    catch (err) {}
-})
-
+    catch (err) { }
+});
 router.get("/vote/:listID/:provID", async (req, res) => {
     const listId = parseInt(req.params.listID);
     const provId = decodeURIComponent(req.params.provID);
-
     try {
         const user = await AppDataSource.getRepository(User).findOneBy({ userProviderId: provId });
-        if (!user) return res.status(404).json({ message: "User not found." });
-
+        if (!user)
+            return res.status(404).json({ message: "User not found." });
         const existing = await AppDataSource.getRepository(ListLikes).findOneBy({
             userId: user.userId, listId
         });
-
         if (!existing || isVoteNeutral(existing.isLiked)) {
             return res.status(200).json({ liked: false, disliked: false });
         }
-
         return res.status(200).json({
             liked: isVoteLiked(existing.isLiked),
             disliked: isVoteDisliked(existing.isLiked),
         });
-    } catch (err) {
+    }
+    catch (err) {
         console.error("Error fetching vote status:", err);
         return res.status(500).json({ message: "Internal server error." });
     }
 });
-
 router.post("/like/:listID/:provID", async (req, res) => {
     const listId = parseInt(req.params.listID);
     const provId = decodeURIComponent(req.params.provID);
-
     try {
         const user = await AppDataSource.getRepository(User).findOneBy({ userProviderId: provId });
-        if (!user) return res.status(404).json({ message: "User not found." });
-
+        if (!user)
+            return res.status(404).json({ message: "User not found." });
         const list = await AppDataSource.getRepository(List).findOneBy({ listId });
-        if (!list) return res.status(404).json({ message: "List not found." });
-
+        if (!list)
+            return res.status(404).json({ message: "List not found." });
         const existing = await AppDataSource.getRepository(ListLikes).findOneBy({
             userId: user.userId, listId
         });
-
         if (existing) {
             if (isVoteLiked(existing.isLiked)) {
                 // already liked — undo to neutral (remove row)
@@ -575,7 +490,6 @@ router.post("/like/:listID/:provID", async (req, res) => {
                 disliked: false,
             });
         }
-
         // no existing record — create new
         const newLike = new ListLikes();
         newLike.userId = user.userId;
@@ -584,34 +498,31 @@ router.post("/like/:listID/:provID", async (req, res) => {
         list.listLikes += 1;
         await AppDataSource.getRepository(ListLikes).save(newLike);
         await AppDataSource.getRepository(List).save(list);
-
         return res.status(200).json({
             listLikes: list.listLikes,
             listDislikes: list.listDislikes,
             liked: true,
             disliked: false,
         });
-    } catch (err) {
+    }
+    catch (err) {
         console.error("Error liking list:", err);
         return res.status(500).json({ message: "Internal server error." });
     }
 });
-
 router.post("/dislike/:listID/:provID", async (req, res) => {
     const listId = parseInt(req.params.listID);
     const provId = decodeURIComponent(req.params.provID);
-
     try {
         const user = await AppDataSource.getRepository(User).findOneBy({ userProviderId: provId });
-        if (!user) return res.status(404).json({ message: "User not found." });
-
+        if (!user)
+            return res.status(404).json({ message: "User not found." });
         const list = await AppDataSource.getRepository(List).findOneBy({ listId });
-        if (!list) return res.status(404).json({ message: "List not found." });
-
+        if (!list)
+            return res.status(404).json({ message: "List not found." });
         const existing = await AppDataSource.getRepository(ListLikes).findOneBy({
             userId: user.userId, listId
         });
-
         if (existing) {
             if (isVoteDisliked(existing.isLiked)) {
                 // already disliked — undo to neutral (remove row)
@@ -651,7 +562,6 @@ router.post("/dislike/:listID/:provID", async (req, res) => {
                 disliked: true,
             });
         }
-
         // no existing record — create new
         const newDislike = new ListLikes();
         newDislike.userId = user.userId;
@@ -660,40 +570,35 @@ router.post("/dislike/:listID/:provID", async (req, res) => {
         list.listDislikes += 1;
         await AppDataSource.getRepository(ListLikes).save(newDislike);
         await AppDataSource.getRepository(List).save(list);
-
         return res.status(200).json({
             listLikes: list.listLikes,
             listDislikes: list.listDislikes,
             liked: false,
             disliked: true,
         });
-    } catch (err) {
+    }
+    catch (err) {
         console.error("Error disliking list:", err);
         return res.status(500).json({ message: "Internal server error." });
     }
 });
-
 router.delete("/delete/game/:gameID/:listID/:provID", async (req, res) => {
     const game_id_parsed = parseInt(req.params.gameID);
     const list_id_parsed = parseInt(req.params.listID);
-    const prov_id        = req.params.provID;
-
+    const prov_id = req.params.provID;
     try {
         const user = await AppDataSource.getRepository(User).findOneBy({ userProviderId: prov_id });
         if (!user) {
             return res.status(404).json({ message: "User not found." });
         }
-
         const list = await AppDataSource.getRepository(List).findOneBy({ listId: list_id_parsed });
         if (!list || list.userId !== user.userId) {
             return res.status(403).json({ message: "List not found or does not belong to this user." });
         }
-
         await AppDataSource.getRepository(ListGame).delete({
             gameId: game_id_parsed,
             listId: list_id_parsed,
         });
-
         console.log(`Game ${game_id_parsed} deleted from list ${list_id_parsed}`);
         return res.status(200).json({ message: "Game deleted from list successfully." });
     }
@@ -702,42 +607,36 @@ router.delete("/delete/game/:gameID/:listID/:provID", async (req, res) => {
         return res.status(500).json({ message: "Internal server error." });
     }
 });
-
 router.delete("/delete/list/:listID/:provID", async (req, res) => {
     const list_id_parsed = parseInt(req.params.listID);
     const prov_id = decodeURIComponent(req.params.provID);
-
     try {
         const user = await AppDataSource.getRepository(User).findOneBy({ userProviderId: prov_id });
         if (!user) {
             return res.status(404).json({ message: "User not found." });
         }
-
         const list = await AppDataSource.getRepository(List).findOneBy({ listId: list_id_parsed });
         if (!list || list.userId !== user.userId) {
             return res.status(403).json({ message: "List not found or does not belong to this user." });
         }
-
         const comments = await AppDataSource.getRepository(Comment).find({
             where: { listId: list_id_parsed },
             select: ["commentId"],
         });
         const commentIds = comments.map((c) => c.commentId);
-
         if (commentIds.length > 0) {
             await AppDataSource.getRepository(CommentLikes).delete({ commentId: In(commentIds) });
             await AppDataSource.getRepository(Comment).delete({ listId: list_id_parsed });
         }
-
         await AppDataSource.getRepository(ListLikes).delete({ listId: list_id_parsed });
         await AppDataSource.getRepository(ListGame).delete({ listId: list_id_parsed });
         await AppDataSource.getRepository(List).delete({ listId: list_id_parsed });
-
         console.log(`List ${list_id_parsed} deleted by user ${user.userId}`);
         return res.status(200).json({ message: "List deleted successfully." });
-    } catch (err) {
+    }
+    catch (err) {
         console.error("Error deleting list:", err);
         return res.status(500).json({ message: "Internal server error." });
     }
 });
-
+//# sourceMappingURL=list_route.js.map

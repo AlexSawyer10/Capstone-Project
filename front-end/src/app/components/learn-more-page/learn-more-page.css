@@ -1,6 +1,5 @@
 .learn-more-page {
   color: #f0f0f0;
-  background: #0f0f1a;
   min-height: calc(100vh - 60px);
 }
 
@@ -161,8 +160,10 @@
 }
 
 .stat-card {
-  background: #1e1e2e;
-  border: 1px solid #2a2a3d;
+  background: rgba(30, 30, 60, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(90, 90, 180, 0.25);
   border-radius: 12px;
   padding: 18px 20px;
   display: flex;
@@ -254,8 +255,10 @@
 }
 
 .detail-card {
-  background: #1e1e2e;
-  border: 1px solid #2a2a3d;
+  background: rgba(30, 30, 60, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(90, 90, 180, 0.25);
   border-radius: 12px;
   padding: 18px 20px;
 }

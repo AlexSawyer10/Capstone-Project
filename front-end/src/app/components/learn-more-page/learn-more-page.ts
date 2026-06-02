@@ -1,9 +1,10 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SearchService } from '../../service/search.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AuthService } from '@auth0/auth0-angular';
+import { ListService } from '../../service/list.service';
 
 @Component({
   selector: 'app-learn-more-page',
@@ -18,7 +19,8 @@ export class LearnMorePage implements OnInit {
   private provId: string | null = null;
   private auth = inject(AuthService);
 
-  constructor(private searchService: SearchService, private route: ActivatedRoute,
+  constructor(private searchService: SearchService, private listService: ListService,
+              private route: ActivatedRoute, private router: Router,
               private location: Location) {}
 
   ngOnInit(): void {
@@ -49,5 +51,8 @@ export class LearnMorePage implements OnInit {
     this.location.back();
   }
 
-
+  chooseList(id: number): void {
+    this.listService.setGameId(id);
+    this.router.navigate(['/choose-list-page']);
+  }
 }

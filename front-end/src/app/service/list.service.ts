@@ -11,7 +11,7 @@ export class ListService {
   constructor(private http: HttpClient) {
   }
 
-  privateApiUrl = 'https://capstone-project-production-6947.up.railway.app/list';
+  privateApiUrl = 'http://localhost:3000/list';
 
   private listResultsSubject = new BehaviorSubject<any>(null);
   listResult$ = this.listResultsSubject.asObservable();
@@ -68,7 +68,8 @@ export class ListService {
 
   slotGame(game_ID: number, slot: number, list_ID: number, prov_ID: string,
            game_name: String, game_released: string, game_description: string, game_image: string): Observable<any> {
-    return this.http.post(`${this.privateApiUrl}/set/slot/number/${slot}/${game_ID}/${list_ID}/${prov_ID}/${encodeURIComponent(game_name.toString())}/${game_released}/${encodeURIComponent(game_description)}/${encodeURIComponent(game_image)}`, {});
+    const descriptionParam = game_description ? encodeURIComponent(game_description) : '_';
+    return this.http.post(`${this.privateApiUrl}/set/slot/number/${slot}/${game_ID}/${list_ID}/${prov_ID}/${encodeURIComponent(game_name.toString())}/${game_released}/${descriptionParam}/${encodeURIComponent(game_image)}`, {});
   }
 
   likeList(list_ID: number, prov_ID: string): Observable<any> {

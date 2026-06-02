@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class CommentService {
   constructor(private http: HttpClient) {}
 
-  private apiUrl = 'http://localhost:3000/comment';
+  private apiUrl = 'https://capstone-project-production-6947.up.railway.app/comment';
 
   submitComment(listId: number, provId: string, commentText: string): Observable<any> {
     return this.http.post(

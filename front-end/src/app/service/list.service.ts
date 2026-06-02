@@ -11,7 +11,7 @@ export class ListService {
   constructor(private http: HttpClient) {
   }
 
-  privateApiUrl = 'http://localhost:3000/list';
+  privateApiUrl = 'https://capstone-project-production-6947.up.railway.app/list';
 
   private listResultsSubject = new BehaviorSubject<any>(null);
   listResult$ = this.listResultsSubject.asObservable();

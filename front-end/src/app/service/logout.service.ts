@@ -9,7 +9,7 @@ import {Observable} from 'rxjs';
 export class LogoutService {
   constructor(private http: HttpClient) { }
 
-  private apiUrl = 'http://localhost:3000/logout';
+  private apiUrl = 'https://capstone-project-production-6947.up.railway.app/logout';
 
 
 }

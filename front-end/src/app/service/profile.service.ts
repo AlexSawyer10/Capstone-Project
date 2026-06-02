@@ -11,7 +11,7 @@ import { AuthService } from '@auth0/auth0-angular';
 export class ProfileService {
   constructor(private http: HttpClient, private router: Router, private auth: AuthService) { }
 
-  private apiUrl = 'http://localhost:3000/profile';
+  private apiUrl = 'https://capstone-project-production-6947.up.railway.app/profile';
 
   private profileSearchResultsSubject = new BehaviorSubject<any>(null);
   profileSearchResults$ = this.profileSearchResultsSubject.asObservable();

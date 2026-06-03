@@ -114,43 +114,25 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.post("/set/slot/number/:slot/:gameID/:listID/:provID/:gameName/:gameReleased/:gameDescription/:gameImage", async (req, res) => {
-   const slot_id_parsed  = parseInt(req.params.slot);
-   const game_id_parsed  = parseInt(req.params.gameID);
-   const list_id_parsed  = parseInt(req.params.listID);
-   const prov_id         = req.params.provID;
-   const game_name       = decodeURIComponent(req.params.gameName);
-   const game_released   = req.params.gameReleased;
-   const game_description_raw = decodeURIComponent(req.params.gameDescription);
-   const game_description = game_description_raw === '_' ? '' : game_description_raw;
-   const game_image      = decodeURIComponent(req.params.gameImage);
-
-    /*first check to see if that list ID is = to the user with the provider ID if not return an error. then
-     check to see if that list id and game ID is already in list_game table (in the same row), if not
-     create a new row in the game table with the game info then insert the new list_game info. You make the game table first
-     because the list_game table has to reference a valid game foreign key.
-     and the list_game_rank (which is the slot). Then place the game information coming in into the game table  */
-    /*if that list id and game id are already there, update only the LIST_GAME table with  the new info coming in*/
-
-    console.log("params:", { slot_id_parsed, game_id_parsed, list_id_parsed, prov_id, game_name, game_released, game_description, game_image });
+async function assignGameToSlot(
+    slot_id_parsed: number,
+    game_id_parsed: number,
+    list_id_parsed: number,
+    prov_id: string,
+    game_name: string,
+    game_released: string,
+    game_description: string,
+    game_image: string,
+    res: express.Response,
+) {
+    console.log("assignGameToSlot:", { slot_id_parsed, game_id_parsed, list_id_parsed, prov_id, game_name, game_released, game_description, game_image });
     try {
-        /*first check to see if that list ID is = to the user with the provider ID if not return an error. then
-         check to see if that list id and game ID is already in list_game table (in the same row), if not
-         create a new row in the game table with the game info then insert the new list_game info. You make the game table first
-         because the list_game table has to reference a valid game foreign key.
-         and the list_game_rank (which is the slot). Then place the game information coming in into the game table  */
-        /*if that list id and game id are already there, update only the LIST_GAME table with  the new info coming in*/
-
         const user = await AppDataSource.getRepository(User).findOneBy({ userProviderId: prov_id });
         if (!user) {
             return res.status(404).json({ message: "User not found." });
         }
 
         const list = await AppDataSource.getRepository(List).findOneBy({ listId: list_id_parsed });
-
-        console.log(list?.userId)
-        console.log(user.userProviderId)
-        console.log(user.userId)
 
         if (!list || list.userId !== user.userId) {
             return res.status(403).json({ message: "List not found or does not belong to this user." });
@@ -189,7 +171,69 @@ router.post("/set/slot/number/:slot/:gameID/:listID/:provID/:gameName/:gameRelea
         console.error("Error assigning game to list slot:", err);
         return res.status(500).json({ message: "Internal server error." });
     }
+}
 
+router.post("/set/slot", async (req, res) => {
+    const {
+        slot,
+        gameID,
+        listID,
+        provID,
+        gameName,
+        gameReleased,
+        gameDescription,
+        gameImage,
+    } = req.body ?? {};
+
+    const slot_id_parsed = parseInt(String(slot));
+    const game_id_parsed = parseInt(String(gameID));
+    const list_id_parsed = parseInt(String(listID));
+    const prov_id = typeof provID === "string" ? provID : "";
+
+    if (!Number.isFinite(slot_id_parsed) || !Number.isFinite(game_id_parsed) || !Number.isFinite(list_id_parsed) || !prov_id) {
+        return res.status(400).json({ message: "Invalid slot assignment payload." });
+    }
+
+    const game_name = typeof gameName === "string" ? gameName : "";
+    const game_released = gameReleased != null ? String(gameReleased) : "";
+    const game_description = typeof gameDescription === "string" ? gameDescription : "";
+    const game_image = typeof gameImage === "string" ? gameImage : "";
+
+    return assignGameToSlot(
+        slot_id_parsed,
+        game_id_parsed,
+        list_id_parsed,
+        prov_id,
+        game_name,
+        game_released,
+        game_description,
+        game_image,
+        res,
+    );
+});
+
+router.post("/set/slot/number/:slot/:gameID/:listID/:provID/:gameName/:gameReleased/:gameDescription/:gameImage", async (req, res) => {
+   const slot_id_parsed  = parseInt(req.params.slot);
+   const game_id_parsed  = parseInt(req.params.gameID);
+   const list_id_parsed  = parseInt(req.params.listID);
+   const prov_id         = req.params.provID;
+   const game_name       = decodeURIComponent(req.params.gameName);
+   const game_released   = req.params.gameReleased;
+   const game_description_raw = decodeURIComponent(req.params.gameDescription);
+   const game_description = game_description_raw === '_' ? '' : game_description_raw;
+   const game_image      = decodeURIComponent(req.params.gameImage);
+
+    return assignGameToSlot(
+        slot_id_parsed,
+        game_id_parsed,
+        list_id_parsed,
+        prov_id,
+        game_name,
+        game_released,
+        game_description,
+        game_image,
+        res,
+    );
 });
 
 router.get("/by/prov/:id", async (req, res) => {

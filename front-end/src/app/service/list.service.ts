@@ -23,6 +23,13 @@ export class ListService {
     this.gameIdSubject.next(gameId);
   }
 
+  getGameId(): number | null {
+    const id = this.gameIdSubject.getValue();
+    if (id == null || id === '') return null;
+    const parsed = Number(id);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
   setListResults(results: any) {
     this.listResultsSubject.next(results);
   }
@@ -68,8 +75,16 @@ export class ListService {
 
   slotGame(game_ID: number, slot: number, list_ID: number, prov_ID: string,
            game_name: String, game_released: string, game_description: string, game_image: string): Observable<any> {
-    const descriptionParam = game_description ? encodeURIComponent(game_description) : '_';
-    return this.http.post(`${this.privateApiUrl}/set/slot/number/${slot}/${game_ID}/${list_ID}/${prov_ID}/${encodeURIComponent(game_name.toString())}/${game_released}/${descriptionParam}/${encodeURIComponent(game_image)}`, {});
+    return this.http.post(`${this.privateApiUrl}/set/slot`, {
+      slot,
+      gameID: game_ID,
+      listID: list_ID,
+      provID: prov_ID,
+      gameName: game_name.toString(),
+      gameReleased: game_released ?? '',
+      gameDescription: game_description ?? '',
+      gameImage: game_image ?? '',
+    });
   }
 
   likeList(list_ID: number, prov_ID: string): Observable<any> {

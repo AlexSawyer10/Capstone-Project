@@ -1,11 +1,11 @@
 import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {Router} from '@angular/router';
-import {ListService} from '../../service/list.service';
+import { Router } from '@angular/router';
+import { ListService } from '../../service/list.service';
 import { AuthService } from '@auth0/auth0-angular';
 import type { User } from '@auth0/auth0-angular';
-import {SearchService} from '../../service/search.service';
-import { timer, interval } from 'rxjs';
+import { SearchService } from '../../service/search.service';
+import { switchMap, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-rank-list-page',
@@ -15,19 +15,17 @@ import { timer, interval } from 'rxjs';
 })
 export class RankListPage {
 
-  constructor(private router: Router, private listService: ListService,
-              private searchService: SearchService, private cdr: ChangeDetectorRef
-              ) { }
+  constructor(
+    private router: Router,
+    private listService: ListService,
+    private searchService: SearchService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   private auth = inject(AuthService);
 
-  availableSlots: Array<number> = [1, 2, 3, 4, 5,6,7,8,9,10];
+  availableSlots: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   results: any[] = [];
-  private gameIdResult: any;
-  private game_name: any;
-  private game_descriptionResult: any;
-  private game_dateResult: any;
-  private game_imageResult: any;
   private providerId: string = '';
   successMessage: string = '';
   transferBool: boolean = false;
@@ -51,50 +49,73 @@ export class RankListPage {
     return match?.game_GAME_ID ? match : null;
   }
 
+  private dismissOverlay(message: string, delayMs = 3000): void {
+    this.successMessage = message;
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.transferBool = false;
+      this.cdr.detectChanges();
+    }, delayMs);
+  }
+
   addGameToSlot(slot: number) {
+    const gameId = this.listService.getGameId();
+    const listId = this.results[0]?.list_LIST_ID;
+
+    if (!gameId) {
+      this.dismissOverlay('No game selected. Use Add to List from search first.');
+      return;
+    }
+
+    if (!this.providerId) {
+      this.dismissOverlay('Please log in to add a game.');
+      return;
+    }
+
+    if (!listId) {
+      this.dismissOverlay('List not loaded. Go back and choose a list again.');
+      return;
+    }
+
     this.transferBool = true;
     this.successMessage = 'Adding game to slot...';
-    this.listService.gameIdResult$.subscribe(data => { /*gets GAME ID*/
-      this.gameIdResult = data;
-      console.log('Game ID received in addGameToSlot:', this.gameIdResult);
-    })
+    this.cdr.detectChanges();
 
-    this.searchService.getIndividualGameData(this.gameIdResult).subscribe({
-      next: (response) => {
-        console.log('Individual game data received:', response);
-        this.game_name = response.name;
-        this.game_descriptionResult = response.description;
-        this.game_dateResult = response.released;
-        this.game_imageResult = response.background_image;
+    this.searchService.getIndividualGameData(gameId).pipe(
+      switchMap((game) =>
+        this.listService.slotGame(
+          gameId,
+          slot,
+          listId,
+          this.providerId,
+          game.name,
+          game.released,
+          game.description,
+          game.background_image,
+        ),
+      ),
+      finalize(() => this.cdr.detectChanges()),
+    ).subscribe({
+      next: () => {
+        this.countdown = 5;
+        this.successMessage = 'Game added successfully! Transferring to home page in 5...';
+        console.log('Game added to slot successfully');
 
-        this.listService.slotGame(this.gameIdResult, slot, this.results[0].list_LIST_ID, this.providerId,
-          this.game_name, this.game_dateResult, this.game_descriptionResult, this.game_imageResult).subscribe({
-          next: (response) => {
-            this.countdown = 5;
-            this.successMessage = 'Game added successfully! Transferring to home page in 5...';
-            console.log('Game added to slot successfully:', response);
-
-            const tick = setInterval(() => {
-              this.countdown--;
-              this.successMessage = `Game added successfully! Transferring to home page in ${this.countdown}...`;
-              this.cdr.detectChanges();
-              if (this.countdown === 0) {
-                clearInterval(tick);
-                this.router.navigate(['/']);
-              }
-            }, 1000);
-
-          },
-          error: (error) => {
+        const tick = setInterval(() => {
+          this.countdown--;
+          this.successMessage = `Game added successfully! Transferring to home page in ${this.countdown}...`;
+          this.cdr.detectChanges();
+          if (this.countdown === 0) {
+            clearInterval(tick);
             this.transferBool = false;
-            console.error('Error adding game to slot:', error);
+            this.router.navigate(['/']);
           }
-        });
+        }, 1000);
       },
       error: (error) => {
-        this.transferBool = false;
-        console.error('Error fetching individual game data:', error);
-      }
+        console.error('Error adding game to slot:', error);
+        this.dismissOverlay('Could not add game. Please try again.');
+      },
     });
   }
 }
